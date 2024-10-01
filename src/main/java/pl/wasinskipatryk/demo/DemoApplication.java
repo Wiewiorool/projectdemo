@@ -12,7 +12,15 @@ public class DemoApplication {
         Dealer dealer = new Dealer("Jan", "Kowalski", DegreeDealer.JUNIOR);
         Client client = new Client("Andrzej", "Rodowicz", 4);
         Car car = new Car(new CarPrice(new BigDecimal(20000), new BigDecimal(24000)),
-                new CarDetails("Audi A4", 2024, "black", 5, 224, TypeOfCar.SEDAN));
+                new CarDetails.CarDetailsBuilder()
+                        .setModelName("Audi a4")
+                        .setTypeOfCar(TypeOfCar.KOMBI)
+                        .setColor("black")
+                        .setHorsePower(220)
+                        .setNumberOfDoors(5)
+                        .setProductionYear(2014)
+                        .build()
+        );
     }
 
 }
