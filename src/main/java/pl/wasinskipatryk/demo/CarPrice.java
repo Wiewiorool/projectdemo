@@ -6,8 +6,27 @@ public class CarPrice {
     private BigDecimal buyPrice;
     private BigDecimal sellPrice;
 
-    public CarPrice(BigDecimal buyPrice, BigDecimal sellPrice) {
-        this.buyPrice = buyPrice;
-        this.sellPrice = sellPrice;
+    private CarPrice(CarPriceBuilder carPriceBuilder) {
+        this.buyPrice = carPriceBuilder.buyPrice;
+        this.sellPrice = carPriceBuilder.sellPrice;
+    }
+
+    public static class CarPriceBuilder {
+        private BigDecimal buyPrice;
+        private BigDecimal sellPrice;
+
+        public CarPriceBuilder setSellPrice(BigDecimal sellPrice) {
+            this.sellPrice = sellPrice;
+            return this;
+        }
+
+        public CarPriceBuilder setBuyPrice(BigDecimal buyPrice) {
+            this.buyPrice = buyPrice;
+            return this;
+        }
+
+        public CarPrice build() {
+            return new CarPrice(this);
+        }
     }
 }

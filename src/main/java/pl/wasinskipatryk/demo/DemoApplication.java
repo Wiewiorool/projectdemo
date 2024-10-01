@@ -11,7 +11,10 @@ public class DemoApplication {
         /*SpringApplication.run(DemoApplication.class, args);*/
         Dealer dealer = new Dealer("Jan", "Kowalski", DegreeDealer.JUNIOR);
         Client client = new Client("Andrzej", "Rodowicz", 4);
-        Car car = new Car(new CarPrice(new BigDecimal(20000), new BigDecimal(24000)),
+        Car car = new Car(new CarPrice.CarPriceBuilder()
+                .setBuyPrice(new BigDecimal(24000))
+                .setSellPrice(new BigDecimal(30000))
+                .build(),
                 new CarDetails.CarDetailsBuilder()
                         .setModelName("Audi a4")
                         .setTypeOfCar(TypeOfCar.KOMBI)
