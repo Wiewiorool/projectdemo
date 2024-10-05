@@ -9,13 +9,11 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         /*SpringApplication.run(DemoApplication.class, args);*/
-        Dealer dealer = new Dealer(new Dealer.DealerBuilder()
+        Dealer dealer = new Dealer.DealerBuilder()
                 .setDegreeDealer(DegreeDealer.JUNIOR)
                 .setSurname("Lolek")
                 .setName("Bolek")
-                .build()
-        );
-
+                .build();
         Car car = new Car(new CarPrice.CarPriceBuilder()
                 .setBuyPrice(new BigDecimal(24000))
                 .setSellPrice(new BigDecimal(30000))
@@ -29,13 +27,12 @@ public class DemoApplication {
                         .setProductionYear(2014)
                         .build()
         );
-
-        Client client = new Client(new Client.ClientBuilder()
+        Client client = new Client.ClientBuilder()
                 .setName("Adam")
                 .setOwnedCars(2)
                 .setSurname("Kowalski")
-                .build()
-        );
+                .build();
+
     }
 
 }
