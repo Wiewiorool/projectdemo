@@ -9,8 +9,13 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         /*SpringApplication.run(DemoApplication.class, args);*/
-        Dealer dealer = new Dealer("Jan", "Kowalski", DegreeDealer.JUNIOR);
-        Client client = new Client("Andrzej", "Rodowicz", 4);
+        Dealer dealer = new Dealer(new Dealer.DealerBuilder()
+                .setDegreeDealer(DegreeDealer.JUNIOR)
+                .setSurname("Lolek")
+                .setName("Bolek")
+                .build()
+        );
+
         Car car = new Car(new CarPrice.CarPriceBuilder()
                 .setBuyPrice(new BigDecimal(24000))
                 .setSellPrice(new BigDecimal(30000))
@@ -23,6 +28,13 @@ public class DemoApplication {
                         .setNumberOfDoors(5)
                         .setProductionYear(2014)
                         .build()
+        );
+
+        Client client = new Client(new Client.ClientBuilder()
+                .setName("Adam")
+                .setOwnedCars(2)
+                .setSurname("Kowalski")
+                .build()
         );
     }
 
