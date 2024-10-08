@@ -11,5 +11,20 @@ public class CarDetails {
     private int horsePower;
     private TypeOfCar typeOfCar;
 
+    public String getModelName() {
+        return modelName;
+    }
+
+    @Override
+    public String toString() {
+        return "CarDetails{" +
+                "modelName='" + modelName + '\'' +
+                ", productionYear=" + productionYear +
+                ", color='" + color + '\'' +
+                ", numberOfDoors=" + numberOfDoors +
+                ", horsePower=" + horsePower +
+                ", typeOfCar=" + typeOfCar +
+                '}';
+    }
 }
 
