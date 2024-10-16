@@ -33,6 +33,11 @@ public class DemoApplication {
                 .setSurname("Kowalski")
                 .build();
 
-    }
+        CarsRepository carsRepository = new ListBasedCarsRepository();
+        carsRepository.add(car);
+        System.out.println(carsRepository.findAll());
+        carsRepository.delete(car);
+        System.out.println(carsRepository.findAll());
 
+    }
 }

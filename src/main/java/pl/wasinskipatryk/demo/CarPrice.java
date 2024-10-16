@@ -11,6 +11,14 @@ public class CarPrice {
         this.sellPrice = carPriceBuilder.sellPrice;
     }
 
+    @Override
+    public String toString() {
+        return "CarPrice{" +
+                "buyPrice=" + buyPrice +
+                ", sellPrice=" + sellPrice +
+                '}';
+    }
+
     public static class CarPriceBuilder {
         private BigDecimal buyPrice;
         private BigDecimal sellPrice;
@@ -28,5 +36,6 @@ public class CarPrice {
         public CarPrice build() {
             return new CarPrice(this);
         }
+
     }
 }
