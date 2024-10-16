@@ -2,7 +2,8 @@ package pl.wasinskipatryk.demo;
 
 import java.util.List;
 
-public interface CarsRepository {
+public  interface CarsRepository {
+
     List<Car> findAll();
 
     Car findByModelName(String modelName);
