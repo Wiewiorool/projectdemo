@@ -24,14 +24,20 @@ public class ListBasedCarsRepository implements CarsRepository {
 
     @Override
     public boolean add(Car carToAdd) {
-        cars.add(carToAdd);
-        return true;
+        return cars.add(carToAdd);
     }
 
     @Override
     public void update(Car oldCar, Car newCar) {
-        delete(oldCar);
-        add(newCar);
+        int indexOfOldCar = cars.indexOf(oldCar);
+
+        //int	indexOf(String str)
+        //Zwraca indeks pozycji pierwszego wystąpienia w danym napisie
+        // napisu podanego jako argument str; jeżeli str nie występuje w tym napisie - zwraca -1
+
+        if (indexOfOldCar != -1) {
+            cars.set(indexOfOldCar, newCar);
+        }
     }
 
     @Override
