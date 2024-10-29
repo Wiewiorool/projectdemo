@@ -14,7 +14,28 @@ public class ListBasedSaleRepository implements SaleRepository {
     }
 
     @Override
-    public void createNewSale(Sale sale) {
+    public List<Sale> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public Sale createNewSale(Sale sale) {
+        return null;
+
+    }
+
+    @Override
+    public void read(Sale sale) {
+
+    }
+
+    @Override
+    public void update(Sale oldSale, Sale newSale) {
+
+    }
+
+    @Override
+    public void delete(Sale sale) {
 
     }
 }
