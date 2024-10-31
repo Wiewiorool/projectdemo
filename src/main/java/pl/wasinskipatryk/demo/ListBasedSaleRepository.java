@@ -25,16 +25,6 @@ public class ListBasedSaleRepository implements SaleRepository {
     }
 
     @Override
-    public void read(Sale sale) {
-
-    }
-
-    @Override
-    public void update(Sale oldSale, Sale newSale) {
-
-    }
-
-    @Override
     public void delete(Sale sale) {
 
     }

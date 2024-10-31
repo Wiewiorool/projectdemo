@@ -1,5 +1,6 @@
 package pl.wasinskipatryk.demo;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Car {
@@ -11,6 +12,11 @@ public class Car {
     public Car(CarPrice carPrice, CarDetails carDetails) {
         this.carDetails = carDetails;
         this.carPrice = carPrice;
+    }
+
+    public BigDecimal getCarSellPrice() {
+        return carPrice.getSellPrice();
+        //Demeter Law -  nie ogladaj się za siebie
     }
 
     public CarDetails getCarDetails() {

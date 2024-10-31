@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class CarPrice {
     private BigDecimal buyPrice;
+
     private BigDecimal sellPrice;
 
     private CarPrice(CarPriceBuilder carPriceBuilder) {
@@ -19,7 +20,12 @@ public class CarPrice {
                 '}';
     }
 
+    public BigDecimal getSellPrice() {
+        return sellPrice;
+    }
+
     public static class CarPriceBuilder {
+
         private BigDecimal buyPrice;
         private BigDecimal sellPrice;
 
