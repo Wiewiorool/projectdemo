@@ -8,8 +8,6 @@ public interface SaleRepository {
 
     Sale createNewSale(Sale sale);
 
-    //here we're going to update amount of cars in magazine?
-
     void delete(Sale sale);
 
 

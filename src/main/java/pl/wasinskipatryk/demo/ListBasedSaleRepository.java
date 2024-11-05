@@ -8,7 +8,7 @@ public class ListBasedSaleRepository implements SaleRepository {
     private List<Sale> sales = new ArrayList<>();
     private CarsRepository carsRepository;
 
-    public ListBasedSaleRepository(CarsRepository carsRepository){
+    public ListBasedSaleRepository(CarsRepository carsRepository) {
         this.carsRepository = carsRepository;
 
     }
@@ -19,13 +19,15 @@ public class ListBasedSaleRepository implements SaleRepository {
     }
 
     @Override
-    public Sale createNewSale(Sale sale) {
-        return null;
-
+    public Sale createNewSale(Sale saleToAdd) {
+        sales.add(saleToAdd);
+        return saleToAdd;
     }
 
     @Override
-    public void delete(Sale sale) {
+    public void delete(Sale saleToBeDeleted) {
+        sales.remove(saleToBeDeleted);
 
     }
+
 }
