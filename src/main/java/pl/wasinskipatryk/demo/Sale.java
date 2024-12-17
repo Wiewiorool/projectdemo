@@ -12,5 +12,7 @@ public class Sale {
     private Car car;
     private BigDecimal provision;
 
-
+    public Car getCar() {
+        return car;
+    }
 }

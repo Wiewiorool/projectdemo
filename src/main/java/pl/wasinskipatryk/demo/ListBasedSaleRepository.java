@@ -21,6 +21,7 @@ public class ListBasedSaleRepository implements SaleRepository {
     @Override
     public Sale createNewSale(Sale saleToAdd) {
         sales.add(saleToAdd);
+        carsRepository.delete(saleToAdd.getCar());
         return saleToAdd;
     }
 

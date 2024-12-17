@@ -10,6 +10,7 @@ public class DemoApplication {
     public static void main(String[] args) {
         /*SpringApplication.run(DemoApplication.class, args);*/
         Dealer dealer = new Dealer.DealerBuilder()
+                //.setSaleRepository(new ListBasedSaleRepository(new ListBasedCarsRepository()))
                 .setDegreeDealer(DegreeDealer.JUNIOR)
                 .setSurname("Lolek")
                 .setName("Bolek")
@@ -33,14 +34,7 @@ public class DemoApplication {
                 .setSurname("Kowalski")
                 .build();
 
-        Sale sale = Sale.builder().build();
-
-
-        CarsRepository carsRepository = new ListBasedCarsRepository();
-        carsRepository.add(car);
-        System.out.println(carsRepository.findAll());
-        carsRepository.delete(car);
-        System.out.println(carsRepository.findAll());
+        dealer.sellCar(client, car, BigDecimal.valueOf(30000));
 
     }
 }

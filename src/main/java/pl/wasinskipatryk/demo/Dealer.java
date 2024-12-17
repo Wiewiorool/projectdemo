@@ -24,7 +24,6 @@ public class Dealer {
                 .build();
         saleRepository.createNewSale(sale);
     }
-
     public static class DealerBuilder {
         private String name;
         private String surname;
