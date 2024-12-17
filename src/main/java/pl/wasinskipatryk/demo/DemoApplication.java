@@ -1,7 +1,6 @@
 package pl.wasinskipatryk.demo;
 
 
-
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -23,17 +22,18 @@ public class DemoApplication {
                 .setSurname("Lolek")
                 .setName("Bolek")
                 .build();
-        Car car = new Car(new CarPrice.CarPriceBuilder()
-                .setBuyPrice(new BigDecimal(24000))
-                .setSellPrice(new BigDecimal(30000))
+        Car car = new Car(1, CarDetails.builder()
+                .id(1)
+                .modelName("Audi a4")
+                .typeOfCar(TypeOfCar.KOMBI)
+                .color("black")
+                .horsePower(220)
+                .numberOfDoors(5)
+                .productionYear(2014)
                 .build(),
-                CarDetails.builder()
-                        .modelName("Audi a4")
-                        .typeOfCar(TypeOfCar.KOMBI)
-                        .color("black")
-                        .horsePower(220)
-                        .numberOfDoors(5)
-                        .productionYear(2014)
+                new CarPrice.CarPriceBuilder()
+                        .setBuyPrice(new BigDecimal(24000))
+                        .setSellPrice(new BigDecimal(30000))
                         .build()
         );
         Client client = new Client.ClientBuilder()
