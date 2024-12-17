@@ -5,9 +5,13 @@ import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
 import pl.wasinskipatryk.demo.car.TypeOfCar;
+import pl.wasinskipatryk.demo.carsrepository.CarsRepository;
+import pl.wasinskipatryk.demo.carsrepository.FileBasedRepository;
+import pl.wasinskipatryk.demo.carsrepository.ListBasedCarsRepository;
 import pl.wasinskipatryk.demo.client.Client;
 import pl.wasinskipatryk.demo.dealer.Dealer;
 import pl.wasinskipatryk.demo.dealer.DegreeDealer;
+import pl.wasinskipatryk.demo.salesrepository.ListBasedSaleRepository;
 
 import java.math.BigDecimal;
 
@@ -17,7 +21,7 @@ public class DemoApplication {
     public static void main(String[] args) {
         /*SpringApplication.run(DemoApplication.class, args);*/
         Dealer dealer = new Dealer.DealerBuilder()
-                //.setSaleRepository(new ListBasedSaleRepository(new ListBasedCarsRepository()))
+                .setSaleRepository(new ListBasedSaleRepository(new ListBasedCarsRepository()))
                 .setDegreeDealer(DegreeDealer.JUNIOR)
                 .setSurname("Lolek")
                 .setName("Bolek")
@@ -44,5 +48,7 @@ public class DemoApplication {
 
         dealer.sellCar(client, car, BigDecimal.valueOf(30000));
 
+        CarsRepository carsRepository = new FileBasedRepository();
+        carsRepository.findAll();
     }
 }
