@@ -1,4 +1,9 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk.demo.dealer;
+
+import pl.wasinskipatryk.demo.client.Client;
+import pl.wasinskipatryk.demo.sale.Sale;
+import pl.wasinskipatryk.demo.car.Car;
+import pl.wasinskipatryk.demo.salesrepository.SaleRepository;
 
 import java.math.BigDecimal;
 

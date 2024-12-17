@@ -1,15 +1,17 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk.demo.car;
 
 import lombok.Builder;
 
 @Builder
 public class CarDetails {
+    private int id;
     private String modelName;
     private int productionYear;
     private String color;
     private int numberOfDoors;
     private int horsePower;
     private TypeOfCar typeOfCar;
+
 
     public String getModelName() {
         return modelName;

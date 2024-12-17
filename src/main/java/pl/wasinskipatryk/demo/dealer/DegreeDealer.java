@@ -1,4 +1,4 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk.demo.dealer;
 
 public enum DegreeDealer {
     JUNIOR,

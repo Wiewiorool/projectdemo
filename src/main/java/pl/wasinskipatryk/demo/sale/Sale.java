@@ -1,6 +1,9 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk.demo.sale;
 
 import lombok.Builder;
+import pl.wasinskipatryk.demo.car.Car;
+import pl.wasinskipatryk.demo.client.Client;
+import pl.wasinskipatryk.demo.dealer.Dealer;
 
 import java.math.BigDecimal;
 

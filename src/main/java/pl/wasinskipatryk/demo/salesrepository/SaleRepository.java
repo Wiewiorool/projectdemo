@@ -1,4 +1,6 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk.demo.salesrepository;
+
+import pl.wasinskipatryk.demo.sale.Sale;
 
 import java.util.List;
 

@@ -1,10 +1,18 @@
 package pl.wasinskipatryk.demo;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
+import pl.wasinskipatryk.demo.car.Car;
+import pl.wasinskipatryk.demo.car.CarDetails;
+import pl.wasinskipatryk.demo.car.CarPrice;
+import pl.wasinskipatryk.demo.car.TypeOfCar;
+import pl.wasinskipatryk.demo.client.Client;
+import pl.wasinskipatryk.demo.dealer.Dealer;
+import pl.wasinskipatryk.demo.dealer.DegreeDealer;
 
 import java.math.BigDecimal;
 
-@SpringBootApplication
+
 public class DemoApplication {
 
     public static void main(String[] args) {

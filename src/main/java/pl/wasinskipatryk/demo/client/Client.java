@@ -1,4 +1,4 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk.demo.client;
 
 public class Client {
     private String name;
