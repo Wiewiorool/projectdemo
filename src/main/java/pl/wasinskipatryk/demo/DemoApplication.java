@@ -35,11 +35,11 @@ public class DemoApplication {
                 .numberOfDoors(5)
                 .productionYear(2014)
                 .build(),
-                new CarPrice.CarPriceBuilder()
-                        .setBuyPrice(new BigDecimal(24000))
-                        .setSellPrice(new BigDecimal(30000))
-                        .build()
-        );
+                CarPrice.builder()
+                        .id(1)
+                        .buyPrice(BigDecimal.valueOf(10000))
+                        .sellPrice(BigDecimal.valueOf(20000))
+                        .build());
         Client client = new Client.ClientBuilder()
                 .setName("Adam")
                 .setOwnedCars(2)

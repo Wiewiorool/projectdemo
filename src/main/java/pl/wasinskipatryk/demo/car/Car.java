@@ -21,5 +21,8 @@ public class Car {
         return carPrice.getSellPrice();
         //Demeter Law -  nie ogladaj się za siebie
     }
+    public BigDecimal getCarBuyPrice(){
+        return carPrice.getBuyPrice();
+    }
 
 }
