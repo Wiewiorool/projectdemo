@@ -17,19 +17,47 @@ public class FileBasedRepository implements CarsRepository {
 
     public static final String CAR_PRICE_CSV_FILE_NAME = "car_price.csv";
     public static final String CAR_DETAILS_CSV_FILE_NAME = "car_details.csv";
+    public static final String CAR_FILE_NAME = "car.csv";
 
     @Override
     public List<Car> findAll() {
+        List<Car> cars = new ArrayList<>();
+
         Path path = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
+        Path path1 = Paths.get(CAR_PRICE_CSV_FILE_NAME);
+        Path path2 = Paths.get(CAR_FILE_NAME);
+        List<String> carPriceLines = new ArrayList<>();
         List<String> carDetailsLines = new ArrayList<>();
+        List<String> carLines = new ArrayList<>();
         try {
             carDetailsLines = Files.readAllLines(path);
         } catch (IOException e) {
-            System.out.println("Exception during reading file: " + CAR_DETAILS_CSV_FILE_NAME + "Cause:  " + e.getMessage());
+            System.out.println("Exception during reading file: " + CAR_DETAILS_CSV_FILE_NAME + " Cause:  " + e.getCause());
         }
-        for (int i = 0; i < carDetailsLines.size(); i++) {
-            String line = carDetailsLines.get(i);
+        try {
+            carPriceLines = Files.readAllLines(path1);
+        } catch (IOException e) {
+            System.out.println("Exception during reading file: " + CAR_PRICE_CSV_FILE_NAME + " Cause:  " + e.getCause());
+        }
+        try {
+            carLines = Files.readAllLines(path2);
+        } catch (IOException e) {
+            System.out.println("Exception during reading file: " + CAR_FILE_NAME + " Cause:  " + e.getCause());
+        }
+
+        for (int i = 0, j = 0, k = 0; k < carLines.size(); i++, j++, k++) {
+            String line2 = carLines.get(k);
+            String[] elementsTwo = line2.split(",");
+
+            int carPriceId = Integer.parseInt(elementsTwo[2]);
+            int carDetailsId = Integer.parseInt(elementsTwo[1]);
+
+            String line = carDetailsLines.get(carDetailsId - 1);
+            String line1 = carPriceLines.get(carPriceId - 1);
+
             String[] elements = line.split(",");
+            String[] elementsOne = line1.split(",");
+
             CarDetails carDetails = CarDetails.builder()
                     .id(Integer.parseInt(elements[0]))
                     .modelName(elements[1])
@@ -39,30 +67,22 @@ public class FileBasedRepository implements CarsRepository {
                     .horsePower(Integer.parseInt(elements[5]))
                     .typeOfCar(TypeOfCar.valueOf(elements[6]))
                     .build();
-
-        }
-        Path path1 = Paths.get(CAR_PRICE_CSV_FILE_NAME);
-        List<String> carPriceLines = new ArrayList<>();
-        try {
-            carPriceLines = Files.readAllLines(path1);
-        } catch (IOException e) {
-            System.out.println("Exception during reading file: " + CAR_PRICE_CSV_FILE_NAME + "Cause:  " + e.getMessage());
-        }
-        for (int i = 0; i < carPriceLines.size(); i++) {
-            String line1 = carPriceLines.get(i);
-            String[] elementsOne = line1.split(",");
             CarPrice carPrice = CarPrice.builder()
                     .id(Integer.parseInt(elementsOne[0]))
                     .buyPrice(BigDecimal.valueOf(Integer.parseInt(elementsOne[1])))
                     .sellPrice(BigDecimal.valueOf(Integer.parseInt(elementsOne[2])))
                     .build();
 
+            Car car = Car.builder()
+                    .id(Integer.parseInt(elementsTwo[0]))
+                    .carDetails(carDetails)
+                    .carPrice(carPrice)
+                    .build();
+            cars.add(car);
 
         }
-        System.out.println(carDetailsLines);
-        System.out.println(carPriceLines);
-        /////
-        return List.of();
+
+        return cars;
     }
 
 
