@@ -1,5 +1,6 @@
 package pl.wasinskipatryk.demo.car;
 
+import jdk.jshell.Snippet;
 import lombok.Builder;
 
 @Builder
@@ -11,7 +12,6 @@ public class CarDetails {
     private int numberOfDoors;
     private int horsePower;
     private TypeOfCar typeOfCar;
-
 
     public String getModelName() {
         return modelName;
