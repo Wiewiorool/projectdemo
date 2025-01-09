@@ -49,6 +49,7 @@ public class DemoApplication {
         dealer.sellCar(client, car, BigDecimal.valueOf(30000));
 
         CarsRepository carsRepository = new FileBasedRepository();
-        System.out.println(carsRepository.findAll());
+        //System.out.println(carsRepository.findAll());
+        System.out.println(carsRepository.findByModelName("Audi"));
     }
 }

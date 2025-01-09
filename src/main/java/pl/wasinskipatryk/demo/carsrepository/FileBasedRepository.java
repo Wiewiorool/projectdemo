@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FileBasedRepository implements CarsRepository {
 
@@ -78,6 +79,7 @@ public class FileBasedRepository implements CarsRepository {
                     .carDetails(carDetails)
                     .carPrice(carPrice)
                     .build();
+
             cars.add(car);
 
         }
@@ -85,10 +87,15 @@ public class FileBasedRepository implements CarsRepository {
         return cars;
     }
 
-
     @Override
     public Car findByModelName(String modelName) {
+        for(Car car : findAll()){
+            if(car.getCarDetails().getModelName().equals(modelName)){
+                return car;
+            }
+        }
         return null;
+
     }
 
     @Override
