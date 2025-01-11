@@ -50,6 +50,7 @@ public class DemoApplication {
 
         CarsRepository carsRepository = new FileBasedRepository();
         //System.out.println(carsRepository.findAll());
-        System.out.println(carsRepository.findByModelName("Audi"));
+        //System.out.println(carsRepository.findByModelName("toyota"));
+        System.out.println(carsRepository.add(car));
     }
 }

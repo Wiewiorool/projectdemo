@@ -89,8 +89,9 @@ public class FileBasedRepository implements CarsRepository {
 
     @Override
     public Car findByModelName(String modelName) {
-        for(Car car : findAll()){
-            if(car.getCarDetails().getModelName().equals(modelName)){
+        List<Car> allCars = findAll();
+        for(Car car : allCars){
+            if(car.getCarDetails().getModelName().equalsIgnoreCase(modelName)){
                 return car;
             }
         }
@@ -100,7 +101,24 @@ public class FileBasedRepository implements CarsRepository {
 
     @Override
     public boolean add(Car car) {
-        return false;
+        List<Car> allCars = findAll();;
+        Car hyundai = new Car(5, CarDetails.builder()
+                .id(5)
+                .modelName("Hyundai")
+                .typeOfCar(TypeOfCar.KOMBI)
+                .color("blue")
+                .horsePower(180)
+                .numberOfDoors(5)
+                .productionYear(2024)
+                .build(),
+                CarPrice.builder()
+                        .id(2)
+                        .buyPrice(BigDecimal.valueOf(20000))
+                        .sellPrice(BigDecimal.valueOf(30000))
+                        .build());
+        allCars.add(hyundai);
+        System.out.println(allCars);
+        return true;
     }
 
     @Override
