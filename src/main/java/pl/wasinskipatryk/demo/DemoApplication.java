@@ -26,8 +26,9 @@ public class DemoApplication {
                 .setSurname("Lolek")
                 .setName("Bolek")
                 .build();
-        Car car = new Car(1, CarDetails.builder()
-                .id(1)
+        Car car = new Car(1,
+            CarDetails.builder()
+                //
                 .modelName("Kia")
                 .typeOfCar(TypeOfCar.KOMBI)
                 .color("black")

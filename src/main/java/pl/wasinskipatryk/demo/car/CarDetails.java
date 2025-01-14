@@ -2,8 +2,12 @@ package pl.wasinskipatryk.demo.car;
 
 import jdk.jshell.Snippet;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@EqualsAndHashCode
 @Builder
+@Getter
 public class CarDetails {
     private int id;
     private String modelName;
