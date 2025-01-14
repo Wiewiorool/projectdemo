@@ -100,24 +100,9 @@ public class FileBasedRepository implements CarsRepository {
     }
 
     @Override
-    public boolean add(Car car) {
-        List<Car> allCars = findAll();;
-        Car hyundai = new Car(5, CarDetails.builder()
-                .id(5)
-                .modelName("Hyundai")
-                .typeOfCar(TypeOfCar.KOMBI)
-                .color("blue")
-                .horsePower(180)
-                .numberOfDoors(5)
-                .productionYear(2024)
-                .build(),
-                CarPrice.builder()
-                        .id(2)
-                        .buyPrice(BigDecimal.valueOf(20000))
-                        .sellPrice(BigDecimal.valueOf(30000))
-                        .build());
-        allCars.add(hyundai);
-        System.out.println(allCars);
+    public boolean add(Car carToBeAdded) {
+        List<Car> allCars = findAll();
+        allCars.add(carToBeAdded);
         return true;
     }
 

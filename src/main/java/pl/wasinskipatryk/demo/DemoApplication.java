@@ -28,7 +28,7 @@ public class DemoApplication {
                 .build();
         Car car = new Car(1, CarDetails.builder()
                 .id(1)
-                .modelName("Audi a4")
+                .modelName("Kia")
                 .typeOfCar(TypeOfCar.KOMBI)
                 .color("black")
                 .horsePower(220)
@@ -49,8 +49,12 @@ public class DemoApplication {
         dealer.sellCar(client, car, BigDecimal.valueOf(30000));
 
         CarsRepository carsRepository = new FileBasedRepository();
-        //System.out.println(carsRepository.findAll());
         //System.out.println(carsRepository.findByModelName("toyota"));
-        System.out.println(carsRepository.add(car));
+        carsRepository.add(car);
+        if (carsRepository.findByModelName("Kia") == null) {
+            System.out.println(false);
+        } else {
+            System.out.println(true);
+        }
     }
 }
