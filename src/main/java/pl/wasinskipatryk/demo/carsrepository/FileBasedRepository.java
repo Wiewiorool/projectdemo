@@ -90,8 +90,8 @@ public class FileBasedRepository implements CarsRepository {
     @Override
     public Car findByModelName(String modelName) {
         List<Car> allCars = findAll();
-        for(Car car : allCars){
-            if(car.getCarDetails().getModelName().equalsIgnoreCase(modelName)){
+        for (Car car : allCars) {
+            if (car.getCarDetails().getModelName().equalsIgnoreCase(modelName)) {
                 return car;
             }
         }
@@ -109,11 +109,12 @@ public class FileBasedRepository implements CarsRepository {
         // 3. CAR_DETAILS_ID = sprawdzamy, czy nie mamy już takiego car_details
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
         CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar); // może byc nullem
+
         //    a. jeśli mamy (nie jest nullem) - to używamy jego i jego id
         //    b. jesli nie (jest nullem) - to tworzymy nowy i używamy jego nowego id
 
 
-        // 4. CAR_PRICE_ID = sprawdzamy, czy nie mamy już takiego car_pricr
+        // 4. CAR_PRICE_ID = sprawdzamy, czy nie mamy już takiego car_price
         //    a. jeśli mamy - to używamy jego i jego id
         //    b. jesli nie - to tworzymy nowy i używamy jego nowego id
         // jak mamy te wszystkie dane, to mamy też od razu Stringa (wiersz) do zapisania
@@ -125,25 +126,25 @@ public class FileBasedRepository implements CarsRepository {
     }
 
     // znajduje NAJ
-    private int findMaxCurrentId(){
+    private int findMaxCurrentId() {
         List<Car> allCars = findAll();
         int max = 0;
         for (int i = 0; i < allCars.size(); i++) {
             Car car = allCars.get(i);
-            if(car.getId() > max){
+            if (car.getId() > max) {
                 max = car.getId();
             }
         }
         return max;
     }
 
-    private CarDetails findCarDetails(CarDetails toBeFound){
+    private CarDetails findCarDetails(CarDetails toBeFound) {
         // jeśli takie carDetails już istnieje w pliku to go zwróć
         // jeśi nie istnieje - zwróć null
         List<CarDetails> allCarDetails = findAllCarDetails();
         for (int i = 0; i < allCarDetails.size(); i++) {
             CarDetails carDetails = allCarDetails.get(i);
-            if(isCarDetailsTheSameMinusId(carDetails ,toBeFound)){
+            if (isCarDetailsTheSameMinusId(carDetails, toBeFound)) {
                 return carDetails;
             }
         }
@@ -151,17 +152,22 @@ public class FileBasedRepository implements CarsRepository {
     }
 
     // HW 1
-    private boolean isCarDetailsTheSameMinusId(CarDetails carDetails1, CarDetails carDetails2){
+    private boolean isCarDetailsTheSameMinusId(CarDetails carDetails1, CarDetails carDetails2) {
         //zwraca true gdy wszystkie pole, prócz id, są sobie równe
         // jeśli któreś się różni -> false
-        if (!carDetails1.getModelName().equals(carDetails2.getModelName())) {
+        if (!carDetails1.getModelName().equals(carDetails2.getModelName())
+                && carDetails1.getProductionYear() != carDetails2.getProductionYear()
+                && !carDetails1.getColor().equals(carDetails2.getColor())
+                && carDetails1.getNumberOfDoors() != carDetails2.getNumberOfDoors()
+                && carDetails1.getHorsePower() != carDetails2.getHorsePower()
+                && !carDetails1.getTypeOfCar().equals(carDetails2.getTypeOfCar())) {
             return false;
         }
         //hw dokonczyc
         return true;
     }
 
-    private List<CarDetails> findAllCarDetails(){
+    private List<CarDetails> findAllCarDetails() {
         List<CarDetails> carDetails = new ArrayList<>();
         Path carDetailsPath = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
         List<String> carDetailsLines = new ArrayList<>();
@@ -174,14 +180,14 @@ public class FileBasedRepository implements CarsRepository {
             String carDetailAsString = carDetailsLines.get(i); // "1,Audi,2014,black,5,220,KOMBI"
             String[] carDetailsAsArray = carDetailAsString.split(",");
             CarDetails carDetails1 = CarDetails.builder()
-                .id(Integer.parseInt(carDetailsAsArray[0]))
-                .modelName(carDetailsAsArray[1])
-                .productionYear(Integer.parseInt(carDetailsAsArray[2]))
-                .color(carDetailsAsArray[3])
-                .numberOfDoors(Integer.parseInt(carDetailsAsArray[4]))
-                .horsePower(Integer.parseInt(carDetailsAsArray[5]))
-                .typeOfCar(TypeOfCar.valueOf(carDetailsAsArray[6]))
-                .build();
+                    .id(Integer.parseInt(carDetailsAsArray[0]))
+                    .modelName(carDetailsAsArray[1])
+                    .productionYear(Integer.parseInt(carDetailsAsArray[2]))
+                    .color(carDetailsAsArray[3])
+                    .numberOfDoors(Integer.parseInt(carDetailsAsArray[4]))
+                    .horsePower(Integer.parseInt(carDetailsAsArray[5]))
+                    .typeOfCar(TypeOfCar.valueOf(carDetailsAsArray[6]))
+                    .build();
             carDetails.add(carDetails1);
         }
         return carDetails;
