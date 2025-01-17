@@ -102,13 +102,23 @@ public class FileBasedRepository implements CarsRepository {
     @Override
     public boolean add(Car carToBeAdded) {
         // 1. Zamienić carToBeAdded na Stringa --> carToBeAdded => 5,4,4
+        String carToBeAdded1 = carToBeAdded.toString();
 
         // 2. CAR_ID - Potrzebujemy się dowiedzieć jakie id powinno dostac - findMaxId() + 1
         int newIdForCar = findMaxCurrentId() + 1;
 
         // 3. CAR_DETAILS_ID = sprawdzamy, czy nie mamy już takiego car_details
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
-        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar); // może byc nullem
+        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);// może byc nullem
+
+        if (foundOrNotCarDetails.equals(carToBeAdded1)) {
+            System.out.println(findMaxCurrentId() + " " + foundOrNotCarDetails);
+            return false;
+        } else {
+            int newId = newIdForCar;
+            System.out.println(newId + " " + carDetailsOfTheCar);
+            return true;
+        }
 
         //    a. jeśli mamy (nie jest nullem) - to używamy jego i jego id
         //    b. jesli nie (jest nullem) - to tworzymy nowy i używamy jego nowego id
@@ -121,8 +131,6 @@ public class FileBasedRepository implements CarsRepository {
         // do pliku car.csv
         // np: 5,4,2
         // nowe auto z id 5, o nowym car_details z id 4 , ale ze starym car_price o id 2
-
-        return true;
     }
 
     // znajduje NAJ

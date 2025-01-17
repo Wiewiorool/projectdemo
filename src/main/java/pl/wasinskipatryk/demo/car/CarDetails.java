@@ -17,9 +17,6 @@ public class CarDetails {
     private int horsePower;
     private TypeOfCar typeOfCar;
 
-    public String getModelName() {
-        return modelName;
-    }
 
     @Override
     public String toString() {
