@@ -30,10 +30,10 @@ public class DemoApplication {
             CarDetails.builder()
                 //
                 .modelName("Kia")
-                .typeOfCar(TypeOfCar.KOMBI)
-                .color("black")
-                .horsePower(220)
-                .numberOfDoors(5)
+                .typeOfCar(TypeOfCar.SEDAN)
+                .color("yellow")
+                .horsePower(109)
+                .numberOfDoors(2)
                 .productionYear(2014)
                 .build(),
                 CarPrice.builder()

@@ -111,7 +111,7 @@ public class FileBasedRepository implements CarsRepository {
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
         CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);// może byc nullem
 
-        if (foundOrNotCarDetails.equals(carToBeAdded1)) {
+        if (foundOrNotCarDetails.equals(carToBeAdded1)) { //jak dodawałem != null nie pokazywało się nowe auto z nowmy id?
             System.out.println(findMaxCurrentId() + " " + foundOrNotCarDetails);
             return false;
         } else {
