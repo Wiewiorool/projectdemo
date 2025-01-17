@@ -115,8 +115,7 @@ public class FileBasedRepository implements CarsRepository {
             System.out.println(findMaxCurrentId() + " " + foundOrNotCarDetails);
             return false;
         } else {
-            int newId = newIdForCar;
-            System.out.println(newId + " " + carDetailsOfTheCar);
+            System.out.println(newIdForCar + " " + carDetailsOfTheCar);
             return true;
         }
 
