@@ -26,21 +26,23 @@ public class DemoApplication {
                 .setSurname("Lolek")
                 .setName("Bolek")
                 .build();
-        Car car = new Car(1,
-            CarDetails.builder()
-                //
-                .modelName("Kia")
-                .typeOfCar(TypeOfCar.SEDAN)
-                .color("yellow")
-                .horsePower(109)
-                .numberOfDoors(2)
-                .productionYear(2014)
-                .build(),
-                CarPrice.builder()
-                        .id(1)
-                        .buyPrice(BigDecimal.valueOf(10000))
-                        .sellPrice(BigDecimal.valueOf(20000))
-                        .build());
+        Car car = Car.builder()
+                .carDetails(
+                        CarDetails.builder()
+                                //
+                                .modelName("Kia")
+                                .typeOfCar(TypeOfCar.SEDAN)
+                                .color("yellow")
+                                .horsePower(109)
+                                .numberOfDoors(2)
+                                .productionYear(2014)
+                                .build())
+                .carPrice(
+                        CarPrice.builder()
+                                .buyPrice(BigDecimal.valueOf(10000))
+                                .sellPrice(BigDecimal.valueOf(20000))
+                                .build())
+                .build();
         Client client = new Client.ClientBuilder()
                 .setName("Adam")
                 .setOwnedCars(2)

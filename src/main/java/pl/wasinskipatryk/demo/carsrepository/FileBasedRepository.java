@@ -5,11 +5,13 @@ import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
 import pl.wasinskipatryk.demo.car.TypeOfCar;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -101,27 +103,30 @@ public class FileBasedRepository implements CarsRepository {
 
     @Override
     public boolean add(Car carToBeAdded) {
-        // 1. Zamienić carToBeAdded na Stringa --> carToBeAdded => 5,4,4
-        String carToBeAdded1 = carToBeAdded.toString();
 
-        // 2. CAR_ID - Potrzebujemy się dowiedzieć jakie id powinno dostac - findMaxId() + 1
-        int newIdForCar = findMaxCurrentId() + 1;
+        int newIdForCar = findMaxCurrentId() + 1; //  CAR_ID - Potrzebujemy się dowiedzieć jakie id powinno dostac - findMaxId() + 1
+        String carToBeAdded1 = newIdForCar + ","; //  Zamienić carToBeAdded na Stringa --> carToBeAdded => 5,4,4
 
         // 3. CAR_DETAILS_ID = sprawdzamy, czy nie mamy już takiego car_details
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
         CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);// może byc nullem
 
-        if (foundOrNotCarDetails.equals(carToBeAdded1)) { //jak dodawałem != null nie pokazywało się nowe auto z nowmy id?
-            System.out.println(findMaxCurrentId() + " " + foundOrNotCarDetails);
-            return false;
+        if (foundOrNotCarDetails == null) { //jak dodawałem != null nie pokazywało się nowe auto z nowmy id?
+            System.out.println("Nie znaleźliśmy wybranego CarDetails, dodajemy nowe CarDetails");
+            int newCarDetailsId = findMaxCurrentCarDetailsId() + 1;
+            String carDetailsLine = carDetailsAsString(newCarDetailsId, carDetailsOfTheCar);
+            saveNewCarDetails(carDetailsLine, newCarDetailsId);
+            carToBeAdded1 += newCarDetailsId + ",";
         } else {
-            System.out.println(newIdForCar + " " + carDetailsOfTheCar);
+            carToBeAdded1 += foundOrNotCarDetails.getId() + ",";
+            System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
             return true;
         }
 
         //    a. jeśli mamy (nie jest nullem) - to używamy jego i jego id
         //    b. jesli nie (jest nullem) - to tworzymy nowy i używamy jego nowego id
 
+        //HW
 
         // 4. CAR_PRICE_ID = sprawdzamy, czy nie mamy już takiego car_price
         //    a. jeśli mamy - to używamy jego i jego id
@@ -130,7 +135,42 @@ public class FileBasedRepository implements CarsRepository {
         // do pliku car.csv
         // np: 5,4,2
         // nowe auto z id 5, o nowym car_details z id 4 , ale ze starym car_price o id 2
+        return true;
     }
+
+
+    private String carDetailsAsString(int carDetailsId, CarDetails carDetails) {
+
+        String line = carDetailsId + "," + carDetails.getModelName() + "," + carDetails.getProductionYear() + ","
+                + carDetails.getColor() + "," + carDetails.getNumberOfDoors() + "," + carDetails.getHorsePower() + ","
+                + carDetails.getTypeOfCar() + "\n";
+
+        return line;
+    }
+
+    private static void saveNewCarDetails(String carDetailsToBeSaved, int newCarDetailsId) {
+        Path carDetailsPath = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
+        try {
+            Files.writeString(carDetailsPath, carDetailsToBeSaved, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            System.out.println("Nie udało się wpisać " + e.getMessage());
+        }
+
+        System.out.println("Saved new car details with id: " + newCarDetailsId);
+    }
+
+    private int findMaxCurrentCarDetailsId() {
+        List<CarDetails> allCarDetails = findAllCarDetails();
+        int max = 0;
+        for (int i = 0; i < allCarDetails.size(); i++) {
+            CarDetails carDetails = allCarDetails.get(i);
+            if (carDetails.getId() > max) {
+                max = carDetails.getId();
+            }
+        }
+        return max;
+    }
+
 
     // znajduje NAJ
     private int findMaxCurrentId() {
@@ -162,16 +202,17 @@ public class FileBasedRepository implements CarsRepository {
     private boolean isCarDetailsTheSameMinusId(CarDetails carDetails1, CarDetails carDetails2) {
         //zwraca true gdy wszystkie pole, prócz id, są sobie równe
         // jeśli któreś się różni -> false
-        if (!carDetails1.getModelName().equals(carDetails2.getModelName())
-                && carDetails1.getProductionYear() != carDetails2.getProductionYear()
-                && !carDetails1.getColor().equals(carDetails2.getColor())
-                && carDetails1.getNumberOfDoors() != carDetails2.getNumberOfDoors()
-                && carDetails1.getHorsePower() != carDetails2.getHorsePower()
-                && !carDetails1.getTypeOfCar().equals(carDetails2.getTypeOfCar())) {
-            return false;
+        if (carDetails1.getModelName().equals(carDetails2.getModelName())
+                && carDetails1.getProductionYear() == carDetails2.getProductionYear()
+                && carDetails1.getColor().equals(carDetails2.getColor())
+                && carDetails1.getNumberOfDoors() == carDetails2.getNumberOfDoors()
+                && carDetails1.getHorsePower() == carDetails2.getHorsePower()
+                && carDetails1.getTypeOfCar().equals(carDetails2.getTypeOfCar())) {
+
+            return true;
         }
         //hw dokonczyc
-        return true;
+        return false;
     }
 
     private List<CarDetails> findAllCarDetails() {
