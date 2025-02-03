@@ -1,21 +1,16 @@
 package pl.wasinskipatryk.demo.car;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
+@Getter
 @Builder
 public class CarPrice {
     private int id;
     private BigDecimal buyPrice;
     private BigDecimal sellPrice;
-
-    public BigDecimal getSellPrice(){
-        return sellPrice;
-    }
-    public BigDecimal getBuyPrice(){
-        return buyPrice;
-    }
 
 
     @Override

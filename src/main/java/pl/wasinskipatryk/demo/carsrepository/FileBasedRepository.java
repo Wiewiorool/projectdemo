@@ -106,6 +106,7 @@ public class FileBasedRepository implements CarsRepository {
 
         int newIdForCar = findMaxCurrentId() + 1; //  CAR_ID - Potrzebujemy się dowiedzieć jakie id powinno dostac - findMaxId() + 1
         String carToBeAdded1 = newIdForCar + ","; //  Zamienić carToBeAdded na Stringa --> carToBeAdded => 5,4,4
+        String carPriceToBeAdded = newIdForCar + ",";
 
         // 3. CAR_DETAILS_ID = sprawdzamy, czy nie mamy już takiego car_details
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
@@ -122,20 +123,35 @@ public class FileBasedRepository implements CarsRepository {
             System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
             return true;
         }
-
         //    a. jeśli mamy (nie jest nullem) - to używamy jego i jego id
         //    b. jesli nie (jest nullem) - to tworzymy nowy i używamy jego nowego id
 
         //HW
 
         // 4. CAR_PRICE_ID = sprawdzamy, czy nie mamy już takiego car_price
+
+        CarPrice carPriceOfTheCar = carToBeAdded.getCarPrice();
+        CarPrice foundOrNotCarPrice = findCarPrice(carPriceOfTheCar);//dokonczyc jak wyzej
+
+        if (foundOrNotCarPrice == null) {
+            System.out.println("Nie znaleźliśmy wybranego CarPrice, dodajemy nowe CarPrice");
+            int newCarPriceId = findMaxCurrentCarPriceId() + 1;
+            String carPriceLine = carPriceAsString(newCarPriceId, carPriceOfTheCar);
+            saveNewCarDetails(carPriceLine, newCarPriceId);
+            carPriceToBeAdded += newCarPriceId + ",";
+        } else {
+            carPriceToBeAdded += foundOrNotCarPrice.getId() + ",";
+            System.out.println("Znaleźliśmy takie CarPrice: " + foundOrNotCarPrice.getId());
+            return true;
+        }
+
         //    a. jeśli mamy - to używamy jego i jego id
         //    b. jesli nie - to tworzymy nowy i używamy jego nowego id
         // jak mamy te wszystkie dane, to mamy też od razu Stringa (wiersz) do zapisania
         // do pliku car.csv
         // np: 5,4,2
         // nowe auto z id 5, o nowym car_details z id 4 , ale ze starym car_price o id 2
-        return true;
+        return false;
     }
 
 
@@ -148,6 +164,11 @@ public class FileBasedRepository implements CarsRepository {
         return line;
     }
 
+    private String carPriceAsString(int carPriceId, CarPrice carPrice) {
+        String line = carPriceId + "," + carPrice.getBuyPrice() + "," + carPrice.getSellPrice() + "\n";
+        return line;
+    }
+
     private static void saveNewCarDetails(String carDetailsToBeSaved, int newCarDetailsId) {
         Path carDetailsPath = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
         try {
@@ -157,6 +178,18 @@ public class FileBasedRepository implements CarsRepository {
         }
 
         System.out.println("Saved new car details with id: " + newCarDetailsId);
+    }
+
+    private int findMaxCurrentCarPriceId() {
+        List<CarPrice> allCarPrice = findAllCarPrice();
+        int max = 0;
+        for (int i = 0; i < allCarPrice.size(); i++) {
+            CarPrice carPrice = allCarPrice.get(i);
+            if (carPrice.getId() > max) {
+                max = carPrice.getId();
+            }
+        }
+        return max;
     }
 
     private int findMaxCurrentCarDetailsId() {
@@ -198,6 +231,19 @@ public class FileBasedRepository implements CarsRepository {
         return null;
     }
 
+    private CarPrice findCarPrice(CarPrice toBeFound) {
+        List<CarPrice> allCarPrice = findAllCarPrice();
+        for (int i = 0; i < allCarPrice.size(); i++) {
+            CarPrice carPrice = allCarPrice.get(i);
+            if (isCarPriceTheSame(carPrice, toBeFound)) {
+                return carPrice;
+            }
+
+
+        }
+        return null;
+    }
+
     // HW 1
     private boolean isCarDetailsTheSameMinusId(CarDetails carDetails1, CarDetails carDetails2) {
         //zwraca true gdy wszystkie pole, prócz id, są sobie równe
@@ -212,6 +258,14 @@ public class FileBasedRepository implements CarsRepository {
             return true;
         }
         //hw dokonczyc
+        return false;
+    }
+
+    private boolean isCarPriceTheSame(CarPrice carPrice1, CarPrice carPrice2) {
+        if (carPrice1.getBuyPrice().equals(carPrice2.getBuyPrice())
+                && carPrice1.getSellPrice().equals(carPrice2.getSellPrice())) {
+            return true;
+        }
         return false;
     }
 
@@ -239,6 +293,28 @@ public class FileBasedRepository implements CarsRepository {
             carDetails.add(carDetails1);
         }
         return carDetails;
+    }
+
+    private List<CarPrice> findAllCarPrice() {
+        List<CarPrice> carPrice = new ArrayList<>();
+        Path carPricePath = Paths.get(CAR_PRICE_CSV_FILE_NAME);
+        List<String> carPricesLines = new ArrayList<>();
+        try {
+            carPricesLines = Files.readAllLines(carPricePath);
+        } catch (IOException e) {
+            System.out.println("Exception during reading file: " + CAR_PRICE_CSV_FILE_NAME + " Cause:  " + e.getCause());
+        }
+        for (int i = 0; i < carPricesLines.size(); i++) {
+            String carPriceAsString = carPricesLines.get(i);
+            String[] carPricesAsArray = carPriceAsString.split(",");
+            CarPrice carPrice1 = CarPrice.builder()
+                    .id(Integer.parseInt(carPricesAsArray[0]))
+                    .buyPrice(BigDecimal.valueOf(Integer.parseInt(carPricesAsArray[1])))
+                    .sellPrice(BigDecimal.valueOf(Integer.parseInt(carPricesAsArray[2])))
+                    .build();
+            carPrice.add(carPrice1);
+        }
+        return carPrice;
     }
 
     @Override

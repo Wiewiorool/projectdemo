@@ -39,8 +39,8 @@ public class DemoApplication {
                                 .build())
                 .carPrice(
                         CarPrice.builder()
-                                .buyPrice(BigDecimal.valueOf(10000))
-                                .sellPrice(BigDecimal.valueOf(20000))
+                                .buyPrice(BigDecimal.valueOf(40000))
+                                .sellPrice(BigDecimal.valueOf(50000))
                                 .build())
                 .build();
         Client client = new Client.ClientBuilder()
