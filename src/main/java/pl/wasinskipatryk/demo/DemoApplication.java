@@ -39,8 +39,8 @@ public class DemoApplication {
                                 .build())
                 .carPrice(
                         CarPrice.builder()
-                                .buyPrice(BigDecimal.valueOf(40000))
-                                .sellPrice(BigDecimal.valueOf(50000))
+                                .buyPrice(BigDecimal.valueOf(50000))
+                                .sellPrice(BigDecimal.valueOf(60000))
                                 .build())
                 .build();
         Client client = new Client.ClientBuilder()
@@ -54,6 +54,7 @@ public class DemoApplication {
         CarsRepository carsRepository = new FileBasedRepository();
         //System.out.println(carsRepository.findByModelName("toyota"));
         carsRepository.add(car);
+
         if (carsRepository.findByModelName("Kia") == null) {
             System.out.println(false);
         } else {

@@ -112,7 +112,9 @@ public class FileBasedRepository implements CarsRepository {
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
         CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);// może byc nullem
 
-        if (foundOrNotCarDetails == null) { //jak dodawałem != null nie pokazywało się nowe auto z nowmy id?
+        if (foundOrNotCarDetails == null) {
+
+            //jak dodawałem != null nie pokazywało się nowe auto z nowmy id?
             System.out.println("Nie znaleźliśmy wybranego CarDetails, dodajemy nowe CarDetails");
             int newCarDetailsId = findMaxCurrentCarDetailsId() + 1;
             String carDetailsLine = carDetailsAsString(newCarDetailsId, carDetailsOfTheCar);
@@ -121,7 +123,6 @@ public class FileBasedRepository implements CarsRepository {
         } else {
             carToBeAdded1 += foundOrNotCarDetails.getId() + ",";
             System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
-            return true;
         }
         //    a. jeśli mamy (nie jest nullem) - to używamy jego i jego id
         //    b. jesli nie (jest nullem) - to tworzymy nowy i używamy jego nowego id
@@ -134,15 +135,15 @@ public class FileBasedRepository implements CarsRepository {
         CarPrice foundOrNotCarPrice = findCarPrice(carPriceOfTheCar);//dokonczyc jak wyzej
 
         if (foundOrNotCarPrice == null) {
+
             System.out.println("Nie znaleźliśmy wybranego CarPrice, dodajemy nowe CarPrice");
             int newCarPriceId = findMaxCurrentCarPriceId() + 1;
             String carPriceLine = carPriceAsString(newCarPriceId, carPriceOfTheCar);
-            saveNewCarDetails(carPriceLine, newCarPriceId);
+            saveNewCarPrice(carPriceLine, newCarPriceId);
             carPriceToBeAdded += newCarPriceId + ",";
         } else {
             carPriceToBeAdded += foundOrNotCarPrice.getId() + ",";
             System.out.println("Znaleźliśmy takie CarPrice: " + foundOrNotCarPrice.getId());
-            return true;
         }
 
         //    a. jeśli mamy - to używamy jego i jego id
@@ -178,6 +179,17 @@ public class FileBasedRepository implements CarsRepository {
         }
 
         System.out.println("Saved new car details with id: " + newCarDetailsId);
+    }
+
+    private static void saveNewCarPrice(String carPriceToBeSaved, int newCarPriceId) {
+        Path carPricePath = Paths.get(CAR_PRICE_CSV_FILE_NAME);
+        try {
+            Files.writeString(carPricePath, carPriceToBeSaved, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            System.out.println("Nie udało się wpisać " + e.getMessage());
+        }
+
+        System.out.println("Saved new car price with id: " + newCarPriceId);
     }
 
     private int findMaxCurrentCarPriceId() {
