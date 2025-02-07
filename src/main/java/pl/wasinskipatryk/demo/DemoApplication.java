@@ -5,8 +5,10 @@ import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
 import pl.wasinskipatryk.demo.car.TypeOfCar;
+import pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsFileBasedRepository;
+import pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsRepository;
 import pl.wasinskipatryk.demo.carsrepository.CarsRepository;
-import pl.wasinskipatryk.demo.carsrepository.FileBasedRepository;
+import pl.wasinskipatryk.demo.carsrepository.CarFileBasedRepository;
 import pl.wasinskipatryk.demo.carsrepository.ListBasedCarsRepository;
 import pl.wasinskipatryk.demo.client.Client;
 import pl.wasinskipatryk.demo.dealer.Dealer;
@@ -51,7 +53,9 @@ public class DemoApplication {
 
         dealer.sellCar(client, car, BigDecimal.valueOf(30000));
 
-        CarsRepository carsRepository = new FileBasedRepository();
+        CarDetailsRepository carDetailsRepository = new CarDetailsFileBasedRepository();
+        CarsRepository carsRepository = new CarFileBasedRepository(carDetailsRepository);
+
         //System.out.println(carsRepository.findByModelName("toyota"));
         carsRepository.add(car);
 

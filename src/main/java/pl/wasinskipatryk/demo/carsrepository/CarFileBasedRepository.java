@@ -4,8 +4,8 @@ import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
 import pl.wasinskipatryk.demo.car.TypeOfCar;
+import pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsRepository;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -14,13 +14,19 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class FileBasedRepository implements CarsRepository {
+import static pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsFileBasedRepository.CAR_DETAILS_CSV_FILE_NAME;
+
+public class CarFileBasedRepository implements CarsRepository {
 
     public static final String CAR_PRICE_CSV_FILE_NAME = "car_price.csv";
-    public static final String CAR_DETAILS_CSV_FILE_NAME = "car_details.csv";
     public static final String CAR_FILE_NAME = "car.csv";
+
+    private CarDetailsRepository carDetailsRepository;
+
+    public CarFileBasedRepository(CarDetailsRepository carDetailsRepository) {
+        this.carDetailsRepository = carDetailsRepository;
+    }
 
     @Override
     public List<Car> findAll() {
@@ -107,7 +113,7 @@ public class FileBasedRepository implements CarsRepository {
         int newIdForCar = findMaxCurrentId() + 1;
         String carToBeAdded1 = newIdForCar + ",";
 
-        int carDetailsId = addCarDetails(carToBeAdded);
+        int carDetailsId = this.carDetailsRepository.addCarDetails(carToBeAdded.getCarDetails());
         carToBeAdded1 += carDetailsId + ",";
 
         int carPriceId = addCarPrice(carToBeAdded);
@@ -134,46 +140,12 @@ public class FileBasedRepository implements CarsRepository {
         }
     }
 
-    private int addCarDetails(Car carToBeAdded) {
-        CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
-        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);
-        if (foundOrNotCarDetails == null) {
-            System.out.println("Nie znaleźliśmy wybranego CarDetails, dodajemy nowe CarDetails");
-            int newCarDetailsId = findMaxCurrentCarDetailsId() + 1;
-            String carDetailsLine = carDetailsAsString(newCarDetailsId, carDetailsOfTheCar);
-            saveNewCarDetails(carDetailsLine, newCarDetailsId);
-            return newCarDetailsId;
-        } else {
-            System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
-            return foundOrNotCarDetails.getId();
-        }
-    }
-
-
-    private String carDetailsAsString(int carDetailsId, CarDetails carDetails) {
-
-        String line = carDetailsId + "," + carDetails.getModelName() + "," + carDetails.getProductionYear() + ","
-                + carDetails.getColor() + "," + carDetails.getNumberOfDoors() + "," + carDetails.getHorsePower() + ","
-                + carDetails.getTypeOfCar() + "\n";
-
-        return line;
-    }
-
     private String carPriceAsString(int carPriceId, CarPrice carPrice) {
         String line = carPriceId + "," + carPrice.getBuyPrice() + "," + carPrice.getSellPrice() + "\n";
         return line;
     }
 
-    private static void saveNewCarDetails(String carDetailsToBeSaved, int newCarDetailsId) {
-        Path carDetailsPath = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
-        try {
-            Files.writeString(carDetailsPath, carDetailsToBeSaved, StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            System.out.println("Nie udało się wpisać " + e.getMessage());
-        }
 
-        System.out.println("Saved new car details with id: " + newCarDetailsId);
-    }
 
     private static void saveNewCarPrice(String carPriceToBeSaved, int newCarPriceId) {
         Path carPricePath = Paths.get(CAR_PRICE_CSV_FILE_NAME);
@@ -209,17 +181,7 @@ public class FileBasedRepository implements CarsRepository {
         return max;
     }
 
-    private int findMaxCurrentCarDetailsId() {
-        List<CarDetails> allCarDetails = findAllCarDetails();
-        int max = 0;
-        for (int i = 0; i < allCarDetails.size(); i++) {
-            CarDetails carDetails = allCarDetails.get(i);
-            if (carDetails.getId() > max) {
-                max = carDetails.getId();
-            }
-        }
-        return max;
-    }
+
 
 
     // znajduje NAJ
@@ -235,18 +197,7 @@ public class FileBasedRepository implements CarsRepository {
         return max;
     }
 
-    private CarDetails findCarDetails(CarDetails toBeFound) {
-        // jeśli takie carDetails już istnieje w pliku to go zwróć
-        // jeśi nie istnieje - zwróć null
-        List<CarDetails> allCarDetails = findAllCarDetails();
-        for (int i = 0; i < allCarDetails.size(); i++) {
-            CarDetails carDetails = allCarDetails.get(i);
-            if (isCarDetailsTheSameMinusId(carDetails, toBeFound)) {
-                return carDetails;
-            }
-        }
-        return null;
-    }
+
 
     private CarPrice findCarPrice(CarPrice toBeFound) {
         List<CarPrice> allCarPrice = findAllCarPrice();
@@ -261,22 +212,8 @@ public class FileBasedRepository implements CarsRepository {
         return null;
     }
 
-    // HW 1
-    private boolean isCarDetailsTheSameMinusId(CarDetails carDetails1, CarDetails carDetails2) {
-        //zwraca true gdy wszystkie pole, prócz id, są sobie równe
-        // jeśli któreś się różni -> false
-        if (carDetails1.getModelName().equals(carDetails2.getModelName())
-                && carDetails1.getProductionYear() == carDetails2.getProductionYear()
-                && carDetails1.getColor().equals(carDetails2.getColor())
-                && carDetails1.getNumberOfDoors() == carDetails2.getNumberOfDoors()
-                && carDetails1.getHorsePower() == carDetails2.getHorsePower()
-                && carDetails1.getTypeOfCar().equals(carDetails2.getTypeOfCar())) {
 
-            return true;
-        }
-        //hw dokonczyc
-        return false;
-    }
+
 
     private boolean isCarPriceTheSame(CarPrice carPrice1, CarPrice carPrice2) {
         if (carPrice1.getBuyPrice().equals(carPrice2.getBuyPrice())
@@ -286,31 +223,7 @@ public class FileBasedRepository implements CarsRepository {
         return false;
     }
 
-    private List<CarDetails> findAllCarDetails() {
-        List<CarDetails> carDetails = new ArrayList<>();
-        Path carDetailsPath = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
-        List<String> carDetailsLines = new ArrayList<>();
-        try {
-            carDetailsLines = Files.readAllLines(carDetailsPath);
-        } catch (IOException e) {
-            System.out.println("Exception during reading file: " + CAR_DETAILS_CSV_FILE_NAME + " Cause:  " + e.getCause());
-        }
-        for (int i = 0; i < carDetailsLines.size(); i++) {
-            String carDetailAsString = carDetailsLines.get(i); // "1,Audi,2014,black,5,220,KOMBI"
-            String[] carDetailsAsArray = carDetailAsString.split(",");
-            CarDetails carDetails1 = CarDetails.builder()
-                    .id(Integer.parseInt(carDetailsAsArray[0]))
-                    .modelName(carDetailsAsArray[1])
-                    .productionYear(Integer.parseInt(carDetailsAsArray[2]))
-                    .color(carDetailsAsArray[3])
-                    .numberOfDoors(Integer.parseInt(carDetailsAsArray[4]))
-                    .horsePower(Integer.parseInt(carDetailsAsArray[5]))
-                    .typeOfCar(TypeOfCar.valueOf(carDetailsAsArray[6]))
-                    .build();
-            carDetails.add(carDetails1);
-        }
-        return carDetails;
-    }
+
 
     private List<CarPrice> findAllCarPrice() {
         List<CarPrice> carPrice = new ArrayList<>();
