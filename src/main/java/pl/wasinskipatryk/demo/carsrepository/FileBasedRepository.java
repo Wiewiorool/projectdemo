@@ -106,7 +106,6 @@ public class FileBasedRepository implements CarsRepository {
 
         int newIdForCar = findMaxCurrentId() + 1; //  CAR_ID - Potrzebujemy się dowiedzieć jakie id powinno dostac - findMaxId() + 1
         String carToBeAdded1 = newIdForCar + ","; //  Zamienić carToBeAdded na Stringa --> carToBeAdded => 5,4,4
-        String carPriceToBeAdded = newIdForCar + ",";
 
         // 3. CAR_DETAILS_ID = sprawdzamy, czy nie mamy już takiego car_details
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
@@ -140,9 +139,9 @@ public class FileBasedRepository implements CarsRepository {
             int newCarPriceId = findMaxCurrentCarPriceId() + 1;
             String carPriceLine = carPriceAsString(newCarPriceId, carPriceOfTheCar);
             saveNewCarPrice(carPriceLine, newCarPriceId);
-            carPriceToBeAdded += newCarPriceId + ",";
+            carToBeAdded1 += newCarPriceId + ",";
         } else {
-            carPriceToBeAdded += foundOrNotCarPrice.getId() + ",";
+            carToBeAdded1 += foundOrNotCarPrice.getId() + ",";
             System.out.println("Znaleźliśmy takie CarPrice: " + foundOrNotCarPrice.getId());
         }
 
@@ -152,6 +151,10 @@ public class FileBasedRepository implements CarsRepository {
         // do pliku car.csv
         // np: 5,4,2
         // nowe auto z id 5, o nowym car_details z id 4 , ale ze starym car_price o id 2
+
+        carToBeAdded1 += "\n";
+        saveNewCar(carToBeAdded1, newIdForCar);
+
         return false;
     }
 
@@ -190,6 +193,17 @@ public class FileBasedRepository implements CarsRepository {
         }
 
         System.out.println("Saved new car price with id: " + newCarPriceId);
+    }
+
+    private static void saveNewCar(String carToBeSaved, int newIdForCar) {
+        Path carPricePath = Paths.get(CAR_FILE_NAME);
+        try {
+            Files.writeString(carPricePath, carToBeSaved, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            System.out.println("Nie udało się wpisać " + e.getMessage());
+        }
+
+        System.out.println("Saved new car with id: " + newIdForCar);
     }
 
     private int findMaxCurrentCarPriceId() {

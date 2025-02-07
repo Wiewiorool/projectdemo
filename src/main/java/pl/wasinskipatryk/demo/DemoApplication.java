@@ -32,15 +32,15 @@ public class DemoApplication {
                                 //
                                 .modelName("Kia")
                                 .typeOfCar(TypeOfCar.SEDAN)
-                                .color("yellow")
-                                .horsePower(109)
+                                .color("black")
+                                .horsePower(110)
                                 .numberOfDoors(2)
                                 .productionYear(2014)
                                 .build())
                 .carPrice(
                         CarPrice.builder()
-                                .buyPrice(BigDecimal.valueOf(50000))
-                                .sellPrice(BigDecimal.valueOf(60000))
+                                .buyPrice(BigDecimal.valueOf(80000))
+                                .sellPrice(BigDecimal.valueOf(90000))
                                 .build())
                 .build();
         Client client = new Client.ClientBuilder()
