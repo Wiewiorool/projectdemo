@@ -104,16 +104,14 @@ public class FileBasedRepository implements CarsRepository {
     @Override
     public boolean add(Car carToBeAdded) {
 
-        int newIdForCar = findMaxCurrentId() + 1; //  CAR_ID - Potrzebujemy się dowiedzieć jakie id powinno dostac - findMaxId() + 1
-        String carToBeAdded1 = newIdForCar + ","; //  Zamienić carToBeAdded na Stringa --> carToBeAdded => 5,4,4
+        int newIdForCar = findMaxCurrentId() + 1;
+        String carToBeAdded1 = newIdForCar + ",";
 
-        // 3. CAR_DETAILS_ID = sprawdzamy, czy nie mamy już takiego car_details
         CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
-        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);// może byc nullem
+        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);
 
         if (foundOrNotCarDetails == null) {
 
-            //jak dodawałem != null nie pokazywało się nowe auto z nowmy id?
             System.out.println("Nie znaleźliśmy wybranego CarDetails, dodajemy nowe CarDetails");
             int newCarDetailsId = findMaxCurrentCarDetailsId() + 1;
             String carDetailsLine = carDetailsAsString(newCarDetailsId, carDetailsOfTheCar);
@@ -123,15 +121,8 @@ public class FileBasedRepository implements CarsRepository {
             carToBeAdded1 += foundOrNotCarDetails.getId() + ",";
             System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
         }
-        //    a. jeśli mamy (nie jest nullem) - to używamy jego i jego id
-        //    b. jesli nie (jest nullem) - to tworzymy nowy i używamy jego nowego id
-
-        //HW
-
-        // 4. CAR_PRICE_ID = sprawdzamy, czy nie mamy już takiego car_price
-
         CarPrice carPriceOfTheCar = carToBeAdded.getCarPrice();
-        CarPrice foundOrNotCarPrice = findCarPrice(carPriceOfTheCar);//dokonczyc jak wyzej
+        CarPrice foundOrNotCarPrice = findCarPrice(carPriceOfTheCar);
 
         if (foundOrNotCarPrice == null) {
 
@@ -144,13 +135,6 @@ public class FileBasedRepository implements CarsRepository {
             carToBeAdded1 += foundOrNotCarPrice.getId() + ",";
             System.out.println("Znaleźliśmy takie CarPrice: " + foundOrNotCarPrice.getId());
         }
-
-        //    a. jeśli mamy - to używamy jego i jego id
-        //    b. jesli nie - to tworzymy nowy i używamy jego nowego id
-        // jak mamy te wszystkie dane, to mamy też od razu Stringa (wiersz) do zapisania
-        // do pliku car.csv
-        // np: 5,4,2
-        // nowe auto z id 5, o nowym car_details z id 4 , ale ze starym car_price o id 2
 
         carToBeAdded1 += "\n";
         saveNewCar(carToBeAdded1, newIdForCar);
