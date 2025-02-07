@@ -107,39 +107,46 @@ public class FileBasedRepository implements CarsRepository {
         int newIdForCar = findMaxCurrentId() + 1;
         String carToBeAdded1 = newIdForCar + ",";
 
-        CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
-        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);
+        int carDetailsId = addCarDetails(carToBeAdded);
+        carToBeAdded1 += carDetailsId + ",";
 
-        if (foundOrNotCarDetails == null) {
-
-            System.out.println("Nie znaleźliśmy wybranego CarDetails, dodajemy nowe CarDetails");
-            int newCarDetailsId = findMaxCurrentCarDetailsId() + 1;
-            String carDetailsLine = carDetailsAsString(newCarDetailsId, carDetailsOfTheCar);
-            saveNewCarDetails(carDetailsLine, newCarDetailsId);
-            carToBeAdded1 += newCarDetailsId + ",";
-        } else {
-            carToBeAdded1 += foundOrNotCarDetails.getId() + ",";
-            System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
-        }
-        CarPrice carPriceOfTheCar = carToBeAdded.getCarPrice();
-        CarPrice foundOrNotCarPrice = findCarPrice(carPriceOfTheCar);
-
-        if (foundOrNotCarPrice == null) {
-
-            System.out.println("Nie znaleźliśmy wybranego CarPrice, dodajemy nowe CarPrice");
-            int newCarPriceId = findMaxCurrentCarPriceId() + 1;
-            String carPriceLine = carPriceAsString(newCarPriceId, carPriceOfTheCar);
-            saveNewCarPrice(carPriceLine, newCarPriceId);
-            carToBeAdded1 += newCarPriceId + ",";
-        } else {
-            carToBeAdded1 += foundOrNotCarPrice.getId() + ",";
-            System.out.println("Znaleźliśmy takie CarPrice: " + foundOrNotCarPrice.getId());
-        }
+        int carPriceId = addCarPrice(carToBeAdded);
+        carToBeAdded1 += carPriceId + ",";
 
         carToBeAdded1 += "\n";
         saveNewCar(carToBeAdded1, newIdForCar);
 
         return false;
+    }
+
+    private int addCarPrice(Car carToBeAdded) {
+        CarPrice carPriceOfTheCar = carToBeAdded.getCarPrice();
+        CarPrice foundOrNotCarPrice = findCarPrice(carPriceOfTheCar);
+        if (foundOrNotCarPrice == null) {
+            System.out.println("Nie znaleźliśmy wybranego CarPrice, dodajemy nowe CarPrice");
+            int newCarPriceId = findMaxCurrentCarPriceId() + 1;
+            String carPriceLine = carPriceAsString(newCarPriceId, carPriceOfTheCar);
+            saveNewCarPrice(carPriceLine, newCarPriceId);
+            return newCarPriceId;
+        } else {
+            System.out.println("Znaleźliśmy takie CarPrice: " + foundOrNotCarPrice.getId());
+            return foundOrNotCarPrice.getId();
+        }
+    }
+
+    private int addCarDetails(Car carToBeAdded) {
+        CarDetails carDetailsOfTheCar = carToBeAdded.getCarDetails();
+        CarDetails foundOrNotCarDetails = findCarDetails(carDetailsOfTheCar);
+        if (foundOrNotCarDetails == null) {
+            System.out.println("Nie znaleźliśmy wybranego CarDetails, dodajemy nowe CarDetails");
+            int newCarDetailsId = findMaxCurrentCarDetailsId() + 1;
+            String carDetailsLine = carDetailsAsString(newCarDetailsId, carDetailsOfTheCar);
+            saveNewCarDetails(carDetailsLine, newCarDetailsId);
+            return newCarDetailsId;
+        } else {
+            System.out.println("Znaleźliśmy takie CarDetails: " + foundOrNotCarDetails.getId());
+            return foundOrNotCarDetails.getId();
+        }
     }
 
 
