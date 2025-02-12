@@ -63,7 +63,7 @@ public class CarDetailsFileBasedRepository implements CarDetailsRepository {
         return max;
     }
 
-    private CarDetails findCarDetails(CarDetails toBeFound) {
+    public CarDetails findCarDetails(CarDetails toBeFound) {
         // jeśli takie carDetails już istnieje w pliku to go zwróć
         // jeśi nie istnieje - zwróć null
         List<CarDetails> allCarDetails = findAllCarDetails();
