@@ -3,21 +3,16 @@ package pl.wasinskipatryk.demo.carsrepository;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
-import pl.wasinskipatryk.demo.car.TypeOfCar;
 import pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsRepository;
 import pl.wasinskipatryk.demo.carpricerepository.CarPriceRepository;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-
-import static pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsFileBasedRepository.CAR_DETAILS_CSV_FILE_NAME;
-import static pl.wasinskipatryk.demo.carpricerepository.CarPriceFileBasedRepository.CAR_PRICE_CSV_FILE_NAME;
 
 
 public class CarFileBasedRepository implements CarsRepository {
@@ -31,72 +26,63 @@ public class CarFileBasedRepository implements CarsRepository {
         this.carPriceRepository = carPriceRepository;
     }
 
-
     @Override
     public List<Car> findAll() {
+        List<String> carLines = readCars();
+        List<CarDetails> carDetails = this.carDetailsRepository.findAllCarDetails();
+        List<CarPrice> carPrice = this.carPriceRepository.findAllCarPrice();
         List<Car> cars = new ArrayList<>();
 
-        Path carDetailsPath = Paths.get(CAR_DETAILS_CSV_FILE_NAME);
-        Path path1 = Paths.get(CAR_PRICE_CSV_FILE_NAME);
-        Path path2 = Paths.get(CAR_FILE_NAME);
-        List<String> carPriceLines = new ArrayList<>();
-        List<String> carDetailsLines = new ArrayList<>();
+        for (int i = 0; i < carLines.size(); i++) {
+            Car car = parseCar(carLines.get(i), carDetails, carPrice);
+            cars.add(car);
+        }
+        return cars;
+    }
+
+    private static List<String> readCars() {
+        Path carPath = Paths.get(CAR_FILE_NAME);
         List<String> carLines = new ArrayList<>();
         try {
-            carDetailsLines = Files.readAllLines(carDetailsPath);
-        } catch (IOException e) {
-            System.out.println("Exception during reading file: " + CAR_DETAILS_CSV_FILE_NAME + " Cause:  " + e.getCause());
-        }
-        try {
-            carPriceLines = Files.readAllLines(path1);
-        } catch (IOException e) {
-            System.out.println("Exception during reading file: " + CAR_PRICE_CSV_FILE_NAME + " Cause:  " + e.getCause());
-        }
-        try {
-            carLines = Files.readAllLines(path2);
+            carLines = Files.readAllLines(carPath);
         } catch (IOException e) {
             System.out.println("Exception during reading file: " + CAR_FILE_NAME + " Cause:  " + e.getCause());
         }
+        return carLines;
+    }
 
-        for (int i = 0, j = 0, k = 0; k < carLines.size(); i++, j++, k++) {
-            String line2 = carLines.get(k);
-            String[] elementsTwo = line2.split(",");
+    private Car parseCar(String carLine, List<CarDetails> carDetails, List<CarPrice> carPrice) {
+        String[] carLineSplit = carLine.split(",");
 
-            int carPriceId = Integer.parseInt(elementsTwo[2]);
-            int carDetailsId = Integer.parseInt(elementsTwo[1]);
+        int carPriceId = Integer.parseInt(carLineSplit[2]);
+        int carDetailsId = Integer.parseInt(carLineSplit[1]);
 
-            String line = carDetailsLines.get(carDetailsId - 1);
-            String line1 = carPriceLines.get(carPriceId - 1);
+        CarDetails foundCarDetail = findCarDetailsById(carDetails, carDetailsId);
+        CarPrice foundCarPrice = findCarPriceById(carPrice, carPriceId);
 
-            String[] elements = line.split(",");
-            String[] elementsOne = line1.split(",");
+        return Car.builder()
+                .id(Integer.parseInt(carLineSplit[0]))
+                .carDetails(foundCarDetail)
+                .carPrice(foundCarPrice)
+                .build();
+    }
 
-            CarDetails carDetails = CarDetails.builder()
-                    .id(Integer.parseInt(elements[0]))
-                    .modelName(elements[1])
-                    .productionYear(Integer.parseInt(elements[2]))
-                    .color(elements[3])
-                    .numberOfDoors(Integer.parseInt(elements[4]))
-                    .horsePower(Integer.parseInt(elements[5]))
-                    .typeOfCar(TypeOfCar.valueOf(elements[6]))
-                    .build();
-            CarPrice carPrice = CarPrice.builder()
-                    .id(Integer.parseInt(elementsOne[0]))
-                    .buyPrice(BigDecimal.valueOf(Integer.parseInt(elementsOne[1])))
-                    .sellPrice(BigDecimal.valueOf(Integer.parseInt(elementsOne[2])))
-                    .build();
-
-            Car car = Car.builder()
-                    .id(Integer.parseInt(elementsTwo[0]))
-                    .carDetails(carDetails)
-                    .carPrice(carPrice)
-                    .build();
-
-            cars.add(car);
-
+    private CarDetails findCarDetailsById(List<CarDetails> carDetails, int id) {
+        for (CarDetails cd : carDetails) {
+            if (cd.getId() == id) {
+                return cd;
+            }
         }
+        return null;
+    }
 
-        return cars;
+    private CarPrice findCarPriceById(List<CarPrice> carPrice, int id) {
+        for (CarPrice cp : carPrice) {
+            if (cp.getId() == id) {
+                return cp;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -108,12 +94,10 @@ public class CarFileBasedRepository implements CarsRepository {
             }
         }
         return null;
-
     }
 
     @Override
     public boolean add(Car carToBeAdded) {
-
         int newIdForCar = findMaxCurrentId() + 1;
         String carToBeAdded1 = newIdForCar + ",";
 
