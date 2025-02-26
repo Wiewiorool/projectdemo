@@ -1,38 +1,56 @@
 package pl.wasinskipatryk.demo.carsrepository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.Test;
 import pl.wasinskipatryk.demo.car.Car;
+import pl.wasinskipatryk.demo.car.CarDetails;
+
 
 class ListBasedCarsRepositoryTest {
-  private CarsRepository listBasedCarsRepository = new ListBasedCarsRepository();
+    private CarsRepository listBasedCarsRepository = new ListBasedCarsRepository();
 
-  @Test
-  public void shouldAddCar(){
-    //given
-    Car carToBeAdded = Car.builder()
-        .id(100)
-        .build();
 
-    //when
-    boolean actual = listBasedCarsRepository.add(carToBeAdded);
+    @Test
+    public void shouldAddCar() {
+        //given
+        Car carToBeAdded = Car.builder()
+                .carDetails(
+                        CarDetails.builder()
+                                .modelName("Audi")
+                                .build()
+                )
+                .id(100)
+                .build();
 
-    //then
-    Assertions.assertTrue(actual);
-  }
+        //when
+        boolean actual = listBasedCarsRepository.add(carToBeAdded);
 
-  @Test
-  public void shouldReturnAllCars() {
+        //then
+        Assertions.assertTrue(actual);
+    }
 
-  // HW
-  }
+    @Test
+    public void shouldReturnAllCars() {
+        //given
+        // HW
+    }
 
-  @Test
-  public void shouldReturnFindByModelName() {
+    @Test
+    public void shouldReturnFindByModelName() {
+        //given
+        String model = "Audi";
 
-    // HW
-  }
-  //itd
+        //when
+
+        Car result = listBasedCarsRepository.findByModelName(model);
+        //then
+
+        Assertions.assertNull(result);
+        Assertions.assertEquals(model,result.getCarDetails().getModelName());
+
+
+        // HW
+    }
+    //itd
 }
