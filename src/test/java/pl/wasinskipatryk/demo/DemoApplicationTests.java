@@ -9,19 +9,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DemoApplicationTests {
 
     @Test
-    public void asd() {
+    public void test() {
         //given
         // wszystkie potrzebne  zmienne, obiekty, mocki
 
         //when
         //wywoływanie metody testowanie
 
-
-
         //then
         //sprawdzenie, czy zwrocne przez metode dane sa spodziewane i poprawne
-
-
 
     }
 
