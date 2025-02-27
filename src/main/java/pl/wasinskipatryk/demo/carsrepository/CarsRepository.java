@@ -12,9 +12,9 @@ public  interface CarsRepository {
 
     boolean add(Car car);
 
-    void update(Car oldCar, Car newCar);
+    Car update(Car oldCar, Car newCar);
 
-    void delete(Car car);
+    boolean delete(Car car);
 
 }
 
