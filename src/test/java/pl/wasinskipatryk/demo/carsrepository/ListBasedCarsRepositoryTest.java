@@ -1,6 +1,7 @@
 package pl.wasinskipatryk.demo.carsrepository;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,9 @@ class ListBasedCarsRepositoryTest {
 
     @Test
     public void shouldFindNoCars() {
-       // given - potrzebne dane
+        // given - potrzebne dane
 
-       // when - tu jest metoda, którą testujemy
+        // when - tu jest metoda, którą testujemy
         List<Car> actual = listBasedCarsRepository.findAll();
 
         // then - będzie sprawdzanie czy zwróciło się to czego się spodziewamy
@@ -28,11 +29,11 @@ class ListBasedCarsRepositoryTest {
         // given - potrzebne dane
         // tworzymy 2 auta
         Car car1 = Car.builder()
-            .id(1)
-            .build();
+                .id(1)
+                .build();
         Car car2 = Car.builder()
-            .id(2)
-            .build();
+                .id(2)
+                .build();
         // dodajemy te 2 auta
         listBasedCarsRepository.add(car1);
         listBasedCarsRepository.add(car2);
@@ -72,9 +73,9 @@ class ListBasedCarsRepositoryTest {
         //given
         String model = "Audi";
         Car car1 = Car.builder()
-            .id(1)
-            .carDetails(CarDetails.builder().modelName(model).build())
-            .build();
+                .id(1)
+                .carDetails(CarDetails.builder().modelName(model).build())
+                .build();
         // dodajemy audi do listy
         listBasedCarsRepository.add(car1);
 
@@ -84,6 +85,56 @@ class ListBasedCarsRepositoryTest {
         //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(model, result.getCarDetails().getModelName());
+    }
+
+    @Test
+    public void shouldDeleteCar() {
+        //given
+        Car car = Car.builder()
+                .id(1)
+                .build();
+        listBasedCarsRepository.add(car);
+
+        //when
+        boolean deleted = listBasedCarsRepository.delete(car);
+
+        //then
+        Assertions.assertTrue(deleted);
+
+    }
+
+    @Test
+    public void shouldNotDeleteCarIfItDidNotExist() {
+        //given
+        Car car = Car.builder()
+                .id(1)
+                .build();
+
+        //when
+        boolean deleted = listBasedCarsRepository.delete(car);
+
+        //then
+        Assertions.assertFalse(deleted);
+
+    }
+
+    @Test
+    public void shouldUpdateCar() {
+        //given
+        Car oldCar = Car.builder()
+                .id(1)
+                .build();
+        Car newCar = Car.builder()
+                .id(2)
+                .build();
+        listBasedCarsRepository.add(oldCar);
+
+        //when
+        Car result = listBasedCarsRepository.update(oldCar, newCar);
+
+        //then
+        Assertions.assertEquals(newCar,result);
+
     }
 
 }

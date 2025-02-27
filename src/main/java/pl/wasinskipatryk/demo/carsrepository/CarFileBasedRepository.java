@@ -137,12 +137,13 @@ public class CarFileBasedRepository implements CarsRepository {
     }
 
     @Override
-    public void update(Car oldCar, Car newCar) {
-
+    public Car update(Car oldCar, Car newCar) {
+        return newCar;
     }
 
     @Override
-    public void delete(Car car) {
+    public boolean delete(Car car) {
+        return true;
 
     }
 }

@@ -30,7 +30,7 @@ public class ListBasedCarsRepository implements CarsRepository {
     }
 
     @Override
-    public void update(Car oldCar, Car newCar) {
+    public Car update(Car oldCar, Car newCar) {
         int indexOfOldCar = cars.indexOf(oldCar);
 
         //int	indexOf(String str)
@@ -40,11 +40,13 @@ public class ListBasedCarsRepository implements CarsRepository {
         if (indexOfOldCar != -1) {
             cars.set(indexOfOldCar, newCar);
         }
+        return newCar;
     }
 
     @Override
-    public void delete(Car carToBeDeleted) {
-        cars.remove(carToBeDeleted);
+    public boolean delete(Car carToBeDeleted) {
+        return cars.remove(carToBeDeleted);
+
     }
 
 }
