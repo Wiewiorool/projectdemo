@@ -1,5 +1,6 @@
 package pl.wasinskipatryk.demo.carsrepository;
 
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
@@ -12,15 +13,51 @@ class ListBasedCarsRepositoryTest {
 
 
     @Test
+    public void shouldFindNoCars() {
+       // given - potrzebne dane
+
+       // when - tu jest metoda, którą testujemy
+        List<Car> actual = listBasedCarsRepository.findAll();
+
+        // then - będzie sprawdzanie czy zwróciło się to czego się spodziewamy
+        Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    public void shouldFindAllCars() {
+        // given - potrzebne dane
+        // tworzymy 2 auta
+        Car car1 = Car.builder()
+            .id(1)
+            .build();
+        Car car2 = Car.builder()
+            .id(2)
+            .build();
+        // dodajemy te 2 auta
+        listBasedCarsRepository.add(car1);
+        listBasedCarsRepository.add(car2);
+
+        // when - tu jest metoda, którą testujemy
+        List<Car> actual = listBasedCarsRepository.findAll();
+
+        // then - będzie sprawdzanie czy zwróciło się to czego się spodziewamy
+        // spodziewamy sie ze te 2 auta sie zwrócą
+        Assertions.assertFalse(actual.isEmpty());
+        Assertions.assertTrue(actual.size() == 2);
+        Assertions.assertEquals(car1, actual.get(0));
+        Assertions.assertEquals(car2, actual.get(1));
+    }
+
+    @Test
     public void shouldAddCar() {
         //given
         Car carToBeAdded = Car.builder()
+                .id(100)
                 .carDetails(
                         CarDetails.builder()
                                 .modelName("Audi")
                                 .build()
                 )
-                .id(100)
                 .build();
 
         //when
@@ -31,26 +68,22 @@ class ListBasedCarsRepositoryTest {
     }
 
     @Test
-    public void shouldReturnAllCars() {
-        //given
-        // HW
-    }
-
-    @Test
     public void shouldReturnFindByModelName() {
         //given
         String model = "Audi";
+        Car car1 = Car.builder()
+            .id(1)
+            .carDetails(CarDetails.builder().modelName(model).build())
+            .build();
+        // dodajemy audi do listy
+        listBasedCarsRepository.add(car1);
 
         //when
-
         Car result = listBasedCarsRepository.findByModelName(model);
+
         //then
-
-        Assertions.assertNull(result);
-        Assertions.assertEquals(model,result.getCarDetails().getModelName());
-
-
-        // HW
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(model, result.getCarDetails().getModelName());
     }
-    //itd
+
 }
