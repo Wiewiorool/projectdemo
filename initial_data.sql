@@ -48,4 +48,4 @@ FOREIGN KEY (client_id) references Client(client_id) on delete cascade,
 FOREIGN KEY (car_id) references Car(car_id) on delete cascade ,
 date timestamp not null,
 sell_car_price decimal(8,2) not null
-)
+);
