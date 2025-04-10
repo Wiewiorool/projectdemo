@@ -20,8 +20,8 @@ create table Car
 (
 car_id serial not null primary key,
 car_details_id integer not null,
-FOREIGN KEY (car_details_id) references Car_details(car_details_id) on delete cascade,
-buy_car_price decimal(8,2)not null
+buy_car_price decimal(8,2)not null,
+FOREIGN KEY (car_details_id) references Car_details(car_details_id) on delete cascade
 );
 
 create table Personal_data
@@ -33,8 +33,9 @@ surname varchar(10) not null
 create table Client
 (client_id serial not null primary key,
 personal_data_id integer not null,
-FOREIGN KEY (personal_data_id) references Personal_data(personal_data_id) on delete cascade,
 owned_cars integer not null,
+car_id integer not null,
+FOREIGN KEY (personal_data_id) references Personal_data(personal_data_id) on delete cascade,
 FOREIGN KEY (car_id) references Car(car_id) on delete cascade
 );
 
@@ -48,11 +49,11 @@ FOREIGN KEY (personal_data_id) references Personal_data(personal_data_id) on del
 create table Sale
 (sale_id serial not null primary key,
 dealer_id integer not null,
-FOREIGN KEY (dealer_id) references Dealer(dealer_id) on delete cascade,
 client_id integer not null,
-FOREIGN KEY (client_id) references Client(client_id) on delete cascade,
 car_id integer not null,
-FOREIGN KEY (car_id) references Car(car_id) on delete cascade ,
 date timestamp not null,
-sell_car_price decimal(8,2) not null
+sell_car_price decimal(8,2) not null,
+FOREIGN KEY (dealer_id) references Dealer(dealer_id) on delete cascade,
+FOREIGN KEY (client_id) references Client(client_id) on delete cascade,
+FOREIGN KEY (car_id) references Car(car_id) on delete cascade
 );
