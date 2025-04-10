@@ -1,6 +1,8 @@
 package pl.wasinskipatryk.demo;
 
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -19,11 +21,13 @@ import pl.wasinskipatryk.demo.salesrepository.ListBasedSaleRepository;
 
 import java.math.BigDecimal;
 
-
+@SpringBootApplication
 public class DemoApplication {
 
     public static void main(String[] args) {
-        /*SpringApplication.run(DemoApplication.class, args);*/
+        SpringApplication.run(DemoApplication.class, args);
+    }
+    private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()
                 .setSaleRepository(new ListBasedSaleRepository(new ListBasedCarsRepository()))
                 .setDegreeDealer(DegreeDealer.JUNIOR)

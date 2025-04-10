@@ -18,9 +18,10 @@ repositories {
 }
 
 dependencies {
-    /*implementation 'org.springframework.boot:spring-boot-starter-data-jpa'*/
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.postgresql:postgresql:42.7.5'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
@@ -29,9 +30,9 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation(platform('org.junit:junit-bom:5.11.4'))
     testImplementation 'org.junit.jupiter:junit-jupiter'
-
 
 }
 
