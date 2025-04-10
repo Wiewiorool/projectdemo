@@ -10,7 +10,7 @@ car_details_id serial not null primary key,
 model_name varchar(10) not null,
 color varchar(10) not null,
 production_year date not null,
-horse_power varchar(10) not null,
+horse_power integer not null,
 number_of_doors integer not null,
 type_of_car_id integer not null,
 FOREIGN KEY (type_of_car_id) references Type_of_car(type_of_car_id) on delete cascade
@@ -19,7 +19,7 @@ FOREIGN KEY (type_of_car_id) references Type_of_car(type_of_car_id) on delete ca
 create table Car
 (
 car_id serial not null primary key,
-car_details_id varchar(20)not null,
+car_details_id integer not null,
 FOREIGN KEY (car_details_id) references Car_details(car_details_id) on delete cascade,
 buy_car_price decimal(8,2)not null
 );
