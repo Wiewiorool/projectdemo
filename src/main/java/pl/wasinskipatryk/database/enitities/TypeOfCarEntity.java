@@ -11,6 +11,7 @@ public class TypeOfCarEntity {
     @Id
     @Column(name="type_of_car_id")
     private long typeOfCarId;
+
     @Column(name="value")
     private double value;
 

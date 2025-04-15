@@ -9,8 +9,10 @@ public class PersonalDataEntity {
     @ManyToMany
     @JoinColumn(name="personal_data_id")
     private long personalDataId;
+
     @Column(name="name")
     private String name;
+
     @Column(name="surname")
     private String surname;
 
