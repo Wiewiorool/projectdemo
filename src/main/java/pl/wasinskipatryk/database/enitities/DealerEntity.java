@@ -12,11 +12,11 @@ public class DealerEntity {
     @Column(name="degree")
     private String degree;
 
-    @OneToOne
-    @JoinColumn(name="personal_data_id")
-    private long personalDataId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="personal_data_id", referencedColumnName = "personal_data_id")
+    private long PersonalDataEntity;
 
-    @ManyToOne
-    @JoinColumn(name="sale_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="sale_id", referencedColumnName = "sale_id")
     private long saleId;
 }

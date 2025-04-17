@@ -21,8 +21,8 @@ public class SaleEntity {
     @JoinColumn(name="client_id")
     private long clientId;
 
-    @ManyToMany
-    @JoinColumn(name="car_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="car_id", referencedColumnName = "car_id")
     private long carId;
 
     @Column(name="date")
