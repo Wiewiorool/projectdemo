@@ -1,6 +1,7 @@
 package pl.wasinskipatryk.database.enitities;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Table(name="Dealer")
 @Entity
@@ -12,11 +13,10 @@ public class DealerEntity {
     @Column(name="degree")
     private String degree;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name="personal_data_id", referencedColumnName = "personal_data_id")
-    private long PersonalDataEntity;
+    private PersonalDataEntity personalData;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sale_id", referencedColumnName = "sale_id")
-    private long saleId;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dealer")
+    private List<SaleEntity> sales;
 }

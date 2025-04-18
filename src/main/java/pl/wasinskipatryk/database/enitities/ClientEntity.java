@@ -10,14 +10,14 @@ public class ClientEntity {
     @Column(name="client_id")
     private long clientId;
 
-    @Column(name="onwed_cars")
+    @Column(name="owned_cars")
     private long ownedCars;
 
     @OneToOne
-    @JoinColumn(name="card_id")
-    private long carId;
+    @JoinColumn(name="car_id", referencedColumnName = "car_id")
+    private CarEntity car;
 
     @OneToOne
-    @JoinColumn(name="personal_data_id")
-    private long personalDataId;
+    @JoinColumn(name="personal_data_id", referencedColumnName = "personal_data_id")
+    private PersonalDataEntity personalData;
 }

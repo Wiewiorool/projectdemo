@@ -2,7 +2,6 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
-
 import java.time.Year;
 
 @Table(name="Car_details")
@@ -19,7 +18,7 @@ public class CarDetailsEntity {
     private String color;
 
     @Column(name="production_year")
-    private Year productionYear;
+    private int productionYear;
 
     @Column(name="horse_power")
     private int horsePower;
@@ -29,8 +28,6 @@ public class CarDetailsEntity {
 
     @OneToOne
     @JoinColumn(name="type_of_car_id")
-    private long typeOfCarId;
-
-
+    private TypeOfCarEntity typeOfCar;
 
 }

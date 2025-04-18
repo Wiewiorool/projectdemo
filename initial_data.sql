@@ -1,7 +1,7 @@
 create table Type_of_car
 (
 type_of_car_id serial not null primary key,
-value decimal(8,2) not null
+value varchar(50) not null
 );
 
 create table Car_details

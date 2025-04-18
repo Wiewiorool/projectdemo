@@ -13,7 +13,7 @@ public class TypeOfCarEntity {
     private long typeOfCarId;
 
     @Column(name="value")
-    private double value;
+    private String value;
 
 
 }

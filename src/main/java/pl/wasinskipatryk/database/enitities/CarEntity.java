@@ -11,9 +11,10 @@ public class CarEntity {
     @Column(name="car_id")
     private long carId;
 
-    @OneToOne
-    @JoinColumn(name="car_details_id")
-    private long carDetailsId;
+    @ManyToOne
+    @MapsId("carDetailsId")
+    @JoinColumn(name="car_details_id", referencedColumnName = "car_details_id")
+    private CarDetailsEntity carDetailsId;
 
     @Column(name="buy_car_price")
     private BigDecimal buyCarPrice;

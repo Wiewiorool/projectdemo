@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 @Entity
 public class PersonalDataEntity {
     @Id
-    @ManyToMany
-    @JoinColumn(name="personal_data_id")
+    @Column(name="personal_data_id")
     private long personalDataId;
 
     @Column(name="name")
