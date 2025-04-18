@@ -4,6 +4,7 @@ package pl.wasinskipatryk;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import pl.wasinskipatryk.database.enitities.ClientEntity;
 import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
@@ -29,7 +30,13 @@ public class DemoApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         ClientRepository clientRepository = context.getBean(ClientRepository.class);
+        ClientEntity clientEntity = ClientEntity.builder()
+                .ownedCars(1)
+                .build();
+        clientRepository.save(clientEntity);
         System.out.println(clientRepository.findAll());
+
+
     }
     private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()

@@ -2,9 +2,12 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 @Table(name="Client")
 @Entity
+@Builder
+
 public class ClientEntity {
     @Id
     @Column(name="client_id")
