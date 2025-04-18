@@ -54,8 +54,8 @@ public class CarFileBasedRepository implements CarsRepository {
     private Car parseCar(String carLine, List<CarDetails> carDetails, List<CarPrice> carPrice) {
         String[] carLineSplit = carLine.split(",");
 
-        int carPriceId = Integer.parseInt(carLineSplit[2]);
         int carDetailsId = Integer.parseInt(carLineSplit[1]);
+        int carPriceId = Integer.parseInt(carLineSplit[2]);
 
         CarDetails foundCarDetail = findCarDetailsById(carDetails, carDetailsId);
         CarPrice foundCarPrice = findCarPriceById(carPrice, carPriceId);
