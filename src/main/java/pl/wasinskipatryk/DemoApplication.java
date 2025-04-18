@@ -1,8 +1,10 @@
-package pl.wasinskipatryk.demo;
+package pl.wasinskipatryk;
 
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -25,7 +27,9 @@ import java.math.BigDecimal;
 public class DemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
+        ClientRepository clientRepository = context.getBean(ClientRepository.class);
+        System.out.println(clientRepository.findAll());
     }
     private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()
