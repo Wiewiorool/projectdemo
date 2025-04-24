@@ -74,8 +74,7 @@ public class DemoApplication {
         clientRepository.save(clientEntity);
 
         SaleEntity saleEntity = SaleEntity.builder()
-                //.dealer()
-                //.clientId()
+                .clientId(clientEntity)
                 .car(carEntity)
                 .date(Instant.ofEpochSecond(2026 - 01 - 01))
                 .sellCarPrice(BigDecimal.valueOf(100000))
