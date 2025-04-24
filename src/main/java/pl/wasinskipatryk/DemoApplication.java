@@ -24,6 +24,7 @@ import pl.wasinskipatryk.demo.salesrepository.ListBasedSaleRepository;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -49,32 +50,15 @@ public class DemoApplication {
                 .productionYear(2000)
                 .horsePower(250)
                 .numberOfDoors(4)
-                //.typeOfCar()
+                .typeOfCar(typeOfCarEntity)
                 .build();
         carDetailsRepository.save(carDetailsEntity);
 
         CarEntity carEntity = CarEntity.builder()
                 .buyCarPrice(BigDecimal.valueOf(30000))
-                //.carDetailsId()
+                .carDetailsId(carDetailsEntity)
                 .build();
         carRepository.save(carEntity);
-
-
-        ClientEntity clientEntity = ClientEntity.builder()
-                .ownedCars(1)
-                .car(carEntity)
-                //.personalData()
-                .build();
-        clientRepository.save(clientEntity);
-
-        SaleEntity saleEntity = SaleEntity.builder()
-                //.dealer()
-                //.clientId()
-                //.car()
-                .date(Instant.ofEpochSecond(2026 - 01 - 01))
-                .sellCarPrice(BigDecimal.valueOf(100000))
-                .build();
-        saleRepository.save(saleEntity);
 
         PersonalDataEntity personalDataEntity = PersonalDataEntity.builder()
                 .name("Josef")
@@ -82,12 +66,33 @@ public class DemoApplication {
                 .build();
         personalDataRepository.save(personalDataEntity);
 
+        ClientEntity clientEntity = ClientEntity.builder()
+                .ownedCars(1)
+                .car(carEntity)
+                .personalData(personalDataEntity)
+                .build();
+        clientRepository.save(clientEntity);
+
+        SaleEntity saleEntity = SaleEntity.builder()
+                //.dealer()
+                //.clientId()
+                .car(carEntity)
+                .date(Instant.ofEpochSecond(2026 - 01 - 01))
+                .sellCarPrice(BigDecimal.valueOf(100000))
+                .build();
+        saleRepository.save(saleEntity);
+
         DealerEntity dealerEntity = DealerEntity.builder()
                 .degree("Master")
                 //.personalData()
-                //.sales()
+                .sales((List<SaleEntity>) saleEntity)
                 .build();
         dealerRepository.save(dealerEntity);
+
+
+
+
+
 
 
         System.out.println(clientRepository.findAll());
