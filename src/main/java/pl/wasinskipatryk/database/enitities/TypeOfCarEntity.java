@@ -4,9 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 
 @Table(name="Type_of_car")
 @Entity
+@Builder
+
 public class TypeOfCarEntity {
     @Id
     @Column(name="type_of_car_id")

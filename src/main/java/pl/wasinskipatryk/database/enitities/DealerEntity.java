@@ -1,10 +1,14 @@
 package pl.wasinskipatryk.database.enitities;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.util.List;
 
 @Table(name="Dealer")
 @Entity
+@Builder
+
 public class DealerEntity {
     @Id
     @Column(name="dealer_id")

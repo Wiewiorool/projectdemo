@@ -2,6 +2,7 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.Instant;
 import java.util.Date;
@@ -10,6 +11,8 @@ import java.math.BigDecimal;
 
 @Table(name="Sale")
 @Entity
+@Builder
+
 public class SaleEntity {
     @Id
     @Column(name="sale_id")

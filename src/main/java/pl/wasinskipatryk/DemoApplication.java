@@ -4,8 +4,8 @@ package pl.wasinskipatryk;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import pl.wasinskipatryk.database.enitities.ClientEntity;
-import pl.wasinskipatryk.database.repositories.ClientRepository;
+import pl.wasinskipatryk.database.enitities.*;
+import pl.wasinskipatryk.database.repositories.*;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -23,6 +23,7 @@ import pl.wasinskipatryk.demo.dealer.DegreeDealer;
 import pl.wasinskipatryk.demo.salesrepository.ListBasedSaleRepository;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -30,14 +31,68 @@ public class DemoApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         ClientRepository clientRepository = context.getBean(ClientRepository.class);
+        pl.wasinskipatryk.database.repositories.CarDetailsRepository carDetailsRepository = context.getBean(pl.wasinskipatryk.database.repositories.CarDetailsRepository.class);
+        CarRepository carRepository = context.getBean(CarRepository.class);
+        DealerRepository dealerRepository = context.getBean(DealerRepository.class);
+        PersonalDataRepository personalDataRepository = context.getBean(PersonalDataRepository.class);
+        SaleRepository saleRepository = context.getBean(SaleRepository.class);
+        TypeOfCarRepository typeOfCarRepository = context.getBean(TypeOfCarRepository.class);
+
+        TypeOfCarEntity typeOfCarEntity = TypeOfCarEntity.builder()
+                .value("Sedan")
+                .build();
+        typeOfCarRepository.save(typeOfCarEntity);
+
+        CarDetailsEntity carDetailsEntity = CarDetailsEntity.builder()
+                .modelName("Audi")
+                .color("Black")
+                .productionYear(2000)
+                .horsePower(250)
+                .numberOfDoors(4)
+                //.typeOfCar()
+                .build();
+        carDetailsRepository.save(carDetailsEntity);
+
+        CarEntity carEntity = CarEntity.builder()
+                .buyCarPrice(BigDecimal.valueOf(30000))
+                //.carDetailsId()
+                .build();
+        carRepository.save(carEntity);
+
+
         ClientEntity clientEntity = ClientEntity.builder()
                 .ownedCars(1)
+                .car(carEntity)
+                //.personalData()
                 .build();
         clientRepository.save(clientEntity);
+
+        SaleEntity saleEntity = SaleEntity.builder()
+                //.dealer()
+                //.clientId()
+                //.car()
+                .date(Instant.ofEpochSecond(2026 - 01 - 01))
+                .sellCarPrice(BigDecimal.valueOf(100000))
+                .build();
+        saleRepository.save(saleEntity);
+
+        PersonalDataEntity personalDataEntity = PersonalDataEntity.builder()
+                .name("Josef")
+                .surname("Kovalski")
+                .build();
+        personalDataRepository.save(personalDataEntity);
+
+        DealerEntity dealerEntity = DealerEntity.builder()
+                .degree("Master")
+                //.personalData()
+                //.sales()
+                .build();
+        dealerRepository.save(dealerEntity);
+
+
         System.out.println(clientRepository.findAll());
-
-
     }
+
     private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()
                 .setSaleRepository(new ListBasedSaleRepository(new ListBasedCarsRepository()))

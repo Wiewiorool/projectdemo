@@ -2,10 +2,15 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.time.Year;
+
 
 @Table(name="Car_details")
 @Entity
+@Builder
+
 public class CarDetailsEntity {
     @Id
     @Column(name="car_details_id")

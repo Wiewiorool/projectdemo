@@ -1,11 +1,15 @@
 package pl.wasinskipatryk.database.enitities;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 
+
 @Table(name="Car")
 @Entity
+@Builder
+
 public class CarEntity {
     @Id
     @Column(name="car_id")
@@ -19,3 +23,5 @@ public class CarEntity {
     @Column(name="buy_car_price")
     private BigDecimal buyCarPrice;
 }
+
+
