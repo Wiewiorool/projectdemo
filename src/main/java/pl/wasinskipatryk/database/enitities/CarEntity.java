@@ -18,7 +18,7 @@ public class CarEntity {
     @ManyToOne
     @MapsId("carDetailsId")
     @JoinColumn(name="car_details_id", referencedColumnName = "car_details_id")
-    private CarDetailsEntity carDetailsId;
+    private CarDetailsEntity carDetails;
 
     @Column(name="buy_car_price")
     private BigDecimal buyCarPrice;

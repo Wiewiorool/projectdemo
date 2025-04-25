@@ -2,7 +2,9 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.Year;
 
@@ -10,9 +12,12 @@ import java.time.Year;
 @Table(name="Car_details")
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class CarDetailsEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="car_details_id")
     private long carDetailsId;
 

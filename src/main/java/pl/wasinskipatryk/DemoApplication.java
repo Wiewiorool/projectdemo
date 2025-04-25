@@ -30,6 +30,7 @@ import java.util.List;
 public class DemoApplication {
 
     public static void main(String[] args) {
+
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         ClientRepository clientRepository = context.getBean(ClientRepository.class);
         pl.wasinskipatryk.database.repositories.CarDetailsRepository carDetailsRepository = context.getBean(pl.wasinskipatryk.database.repositories.CarDetailsRepository.class);
@@ -42,57 +43,56 @@ public class DemoApplication {
         TypeOfCarEntity typeOfCarEntity = TypeOfCarEntity.builder()
                 .value("Sedan")
                 .build();
-        typeOfCarRepository.save(typeOfCarEntity);
 
         CarDetailsEntity carDetailsEntity = CarDetailsEntity.builder()
-                .modelName("Audi")
                 .color("Black")
-                .productionYear(2000)
                 .horsePower(250)
+                .modelName("Audi")
                 .numberOfDoors(4)
+                .productionYear(2024)
                 .typeOfCar(typeOfCarEntity)
                 .build();
-        carDetailsRepository.save(carDetailsEntity);
 
         CarEntity carEntity = CarEntity.builder()
+                .carDetails(carDetailsEntity)
                 .buyCarPrice(BigDecimal.valueOf(30000))
-                .carDetailsId(carDetailsEntity)
                 .build();
-        carRepository.save(carEntity);
 
         PersonalDataEntity personalDataEntity = PersonalDataEntity.builder()
                 .name("Josef")
                 .surname("Kovalski")
                 .build();
-        personalDataRepository.save(personalDataEntity);
 
         ClientEntity clientEntity = ClientEntity.builder()
+                .personalData(personalDataEntity)
                 .ownedCars(1)
                 .car(carEntity)
-                .personalData(personalDataEntity)
                 .build();
-        clientRepository.save(clientEntity);
 
         SaleEntity saleEntity = SaleEntity.builder()
+                //.dealer()
                 .clientId(clientEntity)
                 .car(carEntity)
-                .date(Instant.ofEpochSecond(2026 - 01 - 01))
+                .date(Instant.parse("2026-01-01T00:00:00Z"))
                 .sellCarPrice(BigDecimal.valueOf(100000))
                 .build();
-        saleRepository.save(saleEntity);
 
         DealerEntity dealerEntity = DealerEntity.builder()
-                .degree("Master")
+                .degree("degree")
                 //.personalData()
-                .sales((List<SaleEntity>) saleEntity)
+                .sales(List.of(saleEntity))
                 .build();
+
+        personalDataRepository.save(personalDataEntity);
+        typeOfCarRepository.save(typeOfCarEntity);
+        carDetailsRepository.save(carDetailsEntity);
+        carRepository.save(carEntity);
+
+        clientRepository.save(clientEntity);
+
+        saleRepository.save(saleEntity);
+
         dealerRepository.save(dealerEntity);
-
-
-
-
-
-
 
         System.out.println(clientRepository.findAll());
     }
