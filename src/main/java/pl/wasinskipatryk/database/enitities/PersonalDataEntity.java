@@ -1,14 +1,19 @@
 package pl.wasinskipatryk.database.enitities;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.*;
 
 @Table(name="Personal_data")
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 
 public class PersonalDataEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="personal_data_id")
     private long personalDataId;
 

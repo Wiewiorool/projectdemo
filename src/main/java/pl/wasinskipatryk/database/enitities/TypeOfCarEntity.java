@@ -1,15 +1,15 @@
 package pl.wasinskipatryk.database.enitities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name="Type_of_car")
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 
 public class TypeOfCarEntity {
     @Id

@@ -2,9 +2,7 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Year;
 
@@ -14,6 +12,8 @@ import java.time.Year;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 
 public class CarDetailsEntity {
     @Id
@@ -36,7 +36,7 @@ public class CarDetailsEntity {
     @Column(name="number_of_doors")
     private int numberOfDoors;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="type_of_car_id")
     private TypeOfCarEntity typeOfCar;
 
