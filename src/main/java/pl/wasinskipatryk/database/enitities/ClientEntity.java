@@ -28,4 +28,14 @@ public class ClientEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="personal_data_id", referencedColumnName = "personal_data_id")
     private PersonalDataEntity personalData;
+
+    @Override
+    public String toString() {
+        return "ClientEntity{" +
+                "clientId=" + clientId +
+                ", ownedCars=" + ownedCars +
+                ", car=" + car +
+                ", personalData=" + personalData +
+                '}';
+    }
 }

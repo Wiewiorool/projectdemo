@@ -41,6 +41,15 @@ public class SaleEntity {
     @Column(name="sell_car_price")
     private BigDecimal sellCarPrice;
 
-
-
+    @Override
+    public String toString() {
+        return "SaleEntity{" +
+                "saleId=" + saleId +
+                ", dealer=" + dealer +
+                ", clientId=" + clientId +
+                ", car=" + car +
+                ", date=" + date +
+                ", sellCarPrice=" + sellCarPrice +
+                '}';
+    }
 }

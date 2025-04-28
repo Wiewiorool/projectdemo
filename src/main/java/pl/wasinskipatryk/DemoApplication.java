@@ -58,41 +58,50 @@ public class DemoApplication {
                 .buyCarPrice(BigDecimal.valueOf(30000))
                 .build();
 
-        PersonalDataEntity personalDataEntity = PersonalDataEntity.builder()
+        PersonalDataEntity personalDataEntityDealer = PersonalDataEntity.builder()
+                .name("Maria")
+                .surname("Wojcik")
+                .build();
+
+        PersonalDataEntity personalDataEntityClient = PersonalDataEntity.builder()
                 .name("Josef")
                 .surname("Kovalski")
                 .build();
 
         ClientEntity clientEntity = ClientEntity.builder()
-                .personalData(personalDataEntity)
+                .personalData(personalDataEntityClient)
                 .ownedCars(1)
                 .car(carEntity)
                 .build();
 
+
+        DealerEntity dealerEntity = DealerEntity.builder()
+                .degree("degree2")
+                .personalData(personalDataEntityDealer)
+                .sales(List.of())
+                .build();
+
         SaleEntity saleEntity = SaleEntity.builder()
-                //.dealer()
+                .dealer(dealerEntity)
                 .clientId(clientEntity)
                 .car(carEntity)
                 .date(Instant.parse("2026-01-01T00:00:00Z"))
                 .sellCarPrice(BigDecimal.valueOf(100000))
                 .build();
 
-        DealerEntity dealerEntity = DealerEntity.builder()
-                .degree("degree")
-                //.personalData()
-                .sales(List.of(saleEntity))
-                .build();
-
-        personalDataRepository.save(personalDataEntity);
-        typeOfCarRepository.save(typeOfCarEntity);
-        carDetailsRepository.save(carDetailsEntity);
-        carRepository.save(carEntity);
-
-        clientRepository.save(clientEntity);
-
         saleRepository.save(saleEntity);
 
-        dealerRepository.save(dealerEntity);
+        System.out.println("CLIENTS:");
+        List<ClientEntity> all = clientRepository.findAll();
+        for (ClientEntity entity : all) {
+            System.out.println(entity);
+        }
+        System.out.println("SALES:");
+        List<SaleEntity> sales = saleRepository.findAll();
+        for (SaleEntity sale : sales) {
+            System.out.println(sale);
+        }
+
 
         System.out.println(clientRepository.findAll());
     }
