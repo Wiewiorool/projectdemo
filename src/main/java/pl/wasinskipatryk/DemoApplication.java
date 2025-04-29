@@ -30,15 +30,9 @@ import java.util.List;
 public class DemoApplication {
 
     public static void main(String[] args) {
-
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         ClientRepository clientRepository = context.getBean(ClientRepository.class);
-        pl.wasinskipatryk.database.repositories.CarDetailsRepository carDetailsRepository = context.getBean(pl.wasinskipatryk.database.repositories.CarDetailsRepository.class);
-        CarRepository carRepository = context.getBean(CarRepository.class);
-        DealerRepository dealerRepository = context.getBean(DealerRepository.class);
-        PersonalDataRepository personalDataRepository = context.getBean(PersonalDataRepository.class);
         SaleRepository saleRepository = context.getBean(SaleRepository.class);
-        TypeOfCarRepository typeOfCarRepository = context.getBean(TypeOfCarRepository.class);
 
         TypeOfCarEntity typeOfCarEntity = TypeOfCarEntity.builder()
                 .value("Sedan")
@@ -101,8 +95,6 @@ public class DemoApplication {
         for (SaleEntity sale : sales) {
             System.out.println(sale);
         }
-
-
         System.out.println(clientRepository.findAll());
     }
 

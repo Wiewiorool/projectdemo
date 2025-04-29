@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Table(name="Dealer")
+@Table(name = "Dealer")
 @Entity
 @Builder
 @NoArgsConstructor
@@ -16,16 +16,16 @@ import java.util.List;
 public class DealerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="dealer_id")
+    @Column(name = "dealer_id")
     private long dealerId;
 
-    @Column(name="degree")
+    @Column(name = "degree")
     private String degree;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="personal_data_id", referencedColumnName = "personal_data_id")
+    @JoinColumn(name = "personal_data_id", referencedColumnName = "personal_data_id")
     private PersonalDataEntity personalData;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dealer",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dealer", cascade = CascadeType.ALL)
     private List<SaleEntity> sales;
 }

@@ -6,7 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 
-@Table(name="Car")
+@Table(name = "Car")
 @Entity
 @Builder
 @NoArgsConstructor
@@ -17,14 +17,14 @@ import java.math.BigDecimal;
 public class CarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="car_id")
+    @Column(name = "car_id")
     private long carId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="car_details_id", referencedColumnName = "car_details_id")
+    @JoinColumn(name = "car_details_id", referencedColumnName = "car_details_id")
     private CarDetailsEntity carDetails;
 
-    @Column(name="buy_car_price")
+    @Column(name = "buy_car_price")
     private BigDecimal buyCarPrice;
 }
 

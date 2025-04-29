@@ -3,7 +3,7 @@ package pl.wasinskipatryk.database.enitities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name="Personal_data")
+@Table(name = "Personal_data")
 @Entity
 @Builder
 @NoArgsConstructor
@@ -14,13 +14,13 @@ import lombok.*;
 public class PersonalDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="personal_data_id")
+    @Column(name = "personal_data_id")
     private long personalDataId;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="surname")
+    @Column(name = "surname")
     private String surname;
 
 }
