@@ -9,7 +9,7 @@ create table Car_details
 car_details_id serial not null primary key,
 model_name varchar(10) not null,
 color varchar(10) not null,
-production_year date not null,
+production_year integer not null,
 horse_power integer not null,
 number_of_doors integer not null,
 type_of_car_id integer not null,

@@ -1,18 +1,23 @@
 package pl.wasinskipatryk.database.enitities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Table(name="Type_of_car")
+@Table(name = "Type_of_car")
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+
 public class TypeOfCarEntity {
     @Id
-    @Column(name="type_of_car_id")
+    @Column(name = "type_of_car_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long typeOfCarId;
 
-    @Column(name="value")
+    @Column(name = "value")
     private String value;
 
 

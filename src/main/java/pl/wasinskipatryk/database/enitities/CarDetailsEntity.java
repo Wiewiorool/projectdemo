@@ -2,32 +2,40 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
-import java.time.Year;
+import lombok.*;
 
-@Table(name="Car_details")
+
+@Table(name = "Car_details")
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+
 public class CarDetailsEntity {
     @Id
-    @Column(name="car_details_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_details_id")
     private long carDetailsId;
 
-    @Column(name="model_name")
+    @Column(name = "model_name")
     private String modelName;
 
-    @Column(name="color")
+    @Column(name = "color")
     private String color;
 
-    @Column(name="production_year")
+    @Column(name = "production_year")
     private int productionYear;
 
-    @Column(name="horse_power")
+    @Column(name = "horse_power")
     private int horsePower;
 
-    @Column(name="number_of_doors")
+    @Column(name = "number_of_doors")
     private int numberOfDoors;
 
-    @OneToOne
-    @JoinColumn(name="type_of_car_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_of_car_id")
     private TypeOfCarEntity typeOfCar;
 
 }

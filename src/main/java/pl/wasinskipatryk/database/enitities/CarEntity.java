@@ -1,21 +1,31 @@
 package pl.wasinskipatryk.database.enitities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Table(name="Car")
+
+@Table(name = "Car")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+
 public class CarEntity {
     @Id
-    @Column(name="car_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_id")
     private long carId;
 
-    @ManyToOne
-    @MapsId("carDetailsId")
-    @JoinColumn(name="car_details_id", referencedColumnName = "car_details_id")
-    private CarDetailsEntity carDetailsId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_details_id", referencedColumnName = "car_details_id")
+    private CarDetailsEntity carDetails;
 
-    @Column(name="buy_car_price")
+    @Column(name = "buy_car_price")
     private BigDecimal buyCarPrice;
 }
+
+

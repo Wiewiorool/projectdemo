@@ -2,22 +2,40 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
-@Table(name="Client")
+@Table(name = "Client")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+
 public class ClientEntity {
     @Id
-    @Column(name="client_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "client_id")
     private long clientId;
 
-    @Column(name="owned_cars")
+    @Column(name = "owned_cars")
     private long ownedCars;
 
-    @OneToOne
-    @JoinColumn(name="car_id", referencedColumnName = "car_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
     private CarEntity car;
 
-    @OneToOne
-    @JoinColumn(name="personal_data_id", referencedColumnName = "personal_data_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "personal_data_id", referencedColumnName = "personal_data_id")
     private PersonalDataEntity personalData;
+
+    @Override
+    public String toString() {
+        return "ClientEntity{" +
+                "clientId=" + clientId +
+                ", ownedCars=" + ownedCars +
+                ", car=" + car +
+                ", personalData=" + personalData +
+                '}';
+    }
 }

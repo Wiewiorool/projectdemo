@@ -2,38 +2,52 @@ package pl.wasinskipatryk.database.enitities;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
-import java.time.Instant;
-import java.util.Date;
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.time.Instant;
 
-@Table(name="Sale")
+@Table(name = "Sale")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+
 public class SaleEntity {
     @Id
-    @Column(name="sale_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "sale_id")
     private long saleId;
 
-    @ManyToOne
-    @MapsId("dealerId")
-    @JoinColumn(name="dealer_id", referencedColumnName = "dealer_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dealer_id")
     private DealerEntity dealer;
 
-    @OneToOne
-    @JoinColumn(name="client_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
     private ClientEntity clientId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="car_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_id")
     private CarEntity car;
 
-    @Column(name="date")
+    @Column(name = "date")
     private Instant date;
 
-    @Column(name="sell_car_price")
+    @Column(name = "sell_car_price")
     private BigDecimal sellCarPrice;
 
-
-
+    @Override
+    public String toString() {
+        return "SaleEntity{" +
+                "saleId=" + saleId +
+                ", dealer=" + dealer +
+                ", clientId=" + clientId +
+                ", car=" + car +
+                ", date=" + date +
+                ", sellCarPrice=" + sellCarPrice +
+                '}';
+    }
 }
