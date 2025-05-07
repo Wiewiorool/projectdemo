@@ -3,7 +3,29 @@ package pl.wasinskipatryk.database.service;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 
 public class SalesService {
-    private SaleRepository saleRepository;
+  private SaleRepository saleRepository;
+  // you may change the fields. Remember to write tests.
 
+  /**
+   *  This method will save a new deal.
+   *  Dealer must be found in the system.
+   *  Client must be created and saved as a new client.
+   *  Car must be found in the system.
+   *  Using all the data, a new sale should be created and saved into the database.
+   *  Date of the sale is assumed to be equal to the current time when the method will be run.
+   *
+   * @param dealerId      - who made the deal, id of the dealer. Dealer should already exist in our IT system.
+   * @param clientName    - first name of a new client. This client has never been a client in our saloon so far.
+   * @param clientSurname - surname of a new client. This client has never been a client in our saloon so far.
+   * @param carId         - id of the sold car. This car should already exist in our IT system.
+   * @param commission    - commission added to the car's buyPrice.
+   *                      Example: if the saloon bought the car for 1000 PLN and commission is 1.8,
+   *                      then it means the car was sold in the sale for 1000 * 1.8 = 1800 PLN.
+   *
+   * @return id of the newly crested sale.
+   */
+  public long registerNewSale(int dealerId, String clientName, String clientSurname, int carId, double commission) {
+
+  }
 
 }
