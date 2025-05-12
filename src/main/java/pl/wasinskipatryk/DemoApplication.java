@@ -96,7 +96,10 @@ public class DemoApplication {
             System.out.println(sale);
         }
         System.out.println(clientRepository.findAll());
+
+
     }
+
 
     private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()
