@@ -1,12 +1,13 @@
 package pl.wasinskipatryk.database.service;
 
 import org.springframework.stereotype.Service;
-import pl.wasinskipatryk.database.enitities.ClientEntity;
-import pl.wasinskipatryk.database.enitities.SaleEntity;
+import pl.wasinskipatryk.database.enitities.*;
 import pl.wasinskipatryk.database.repositories.CarRepository;
 import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.DealerRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
+
+import java.math.BigDecimal;
 
 
 @Service
@@ -37,34 +38,33 @@ public class SalesService {
      * @return id of the newly crested sale.
      */
 
-/*    public CarEntity findBuyCarPrice(BigDecimal buyCarPrice) {
-        CarEntity carPrice = carRepository.findBuyCarPrice(buyCarPrice);
-        return carPrice;
-    }*/
-    public void checkIfClientExistIfNotAdd(String clientName, String clientSurname) {
-        ClientEntity existingClient = clientRepository.findByNameAndSurname(clientName, clientSurname);
-        if (existingClient == null) {
-            ClientEntity newClient = new ClientEntity();
-            clientRepository.save(newClient);
-        }
+    public void addNewClient(String clientName, String clientSurname) {
+        ClientEntity newClient = ClientEntity.builder()
+                .personalData(PersonalDataEntity.builder()
+                        .name(clientName)
+                        .surname(clientSurname)
+                        .build())
+                .build();
+        clientRepository.save(newClient);
     }
 
-/*    public void checkDealerId(long dealerId) {
-        Optional<DealerEntity> dealerEntity = dealerRepository.findById(dealerId);
-    }*/
 
-    public long registerNewSale(long dealerId, String clientName, String clientSurname, long carId,
-                                double commission) {
-        checkIfClientExistIfNotAdd(clientName, clientSurname);
-        dealerRepository.findById(dealerId);
-        carRepository.findById(carId);
+    public long registerNewSale(long dealerId, String clientName, String clientSurname, long carId, double commission) {
 
-        SaleEntity saleEntity = new SaleEntity();
-        saleEntity.setDealer();
+        addNewClient(clientName, clientSurname);
+        SaleEntity newSale = SaleEntity.builder()
+                .dealer(DealerEntity.builder()
+                        .dealerId(dealerId)
+                        .build())
+                .car(CarEntity.builder()
+                        .carId(carId)
+                        .buyCarPrice(BigDecimal.valueOf(100000 * commission))
+                        .build())
+                .build();
+        saleRepository.save(newSale);
 
 
-        return 1;
+        return newSale.getSaleId();
     }
-
 
 }
