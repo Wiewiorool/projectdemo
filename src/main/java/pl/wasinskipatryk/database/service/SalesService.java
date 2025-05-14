@@ -8,6 +8,7 @@ import pl.wasinskipatryk.database.repositories.DealerRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 
 @Service
@@ -38,7 +39,7 @@ public class SalesService {
      * @return id of the newly crested sale.
      */
 
-    public void addNewClient(String clientName, String clientSurname) {
+    public ClientEntity addNewClient(String clientName, String clientSurname) {
         ClientEntity newClient = ClientEntity.builder()
                 .personalData(PersonalDataEntity.builder()
                         .name(clientName)
@@ -46,20 +47,22 @@ public class SalesService {
                         .build())
                 .build();
         clientRepository.save(newClient);
+        return newClient;
     }
 
 
     public long registerNewSale(long dealerId, String clientName, String clientSurname, long carId, double commission) {
 
-        addNewClient(clientName, clientSurname);
+        DealerEntity dealerEntity = dealerRepository.findById(dealerId).get();
+        CarEntity carEntity = carRepository.findById(carId).get();
+        ClientEntity clientEntity = addNewClient(clientName, clientSurname);
+
         SaleEntity newSale = SaleEntity.builder()
-                .dealer(DealerEntity.builder()
-                        .dealerId(dealerId)
-                        .build())
-                .car(CarEntity.builder()
-                        .carId(carId)
-                        .buyCarPrice(BigDecimal.valueOf(100000 * commission))
-                        .build())
+                .car(carEntity)
+                .dealer(dealerEntity)
+                .date(Instant.now())
+                .clientId(clientEntity)
+                .sellCarPrice(carEntity.getBuyCarPrice().multiply(BigDecimal.valueOf(commission)))
                 .build();
         saleRepository.save(newSale);
 
