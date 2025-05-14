@@ -46,8 +46,7 @@ public class SalesService {
                         .surname(clientSurname)
                         .build())
                 .build();
-        clientRepository.save(newClient);
-        return newClient;
+        return clientRepository.save(newClient);
     }
 
 
