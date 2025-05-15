@@ -19,11 +19,11 @@ public class ClientEntity {
     private long clientId;
 
     @Column(name = "owned_cars")
-    private long ownedCars;
+    private long previouslyOwnedCars; // number of cars BEFORE making sale
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id", referencedColumnName = "car_id")
-    private CarEntity car;
+    private CarEntity car; // the car this client is buying
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "personal_data_id", referencedColumnName = "personal_data_id")
@@ -32,10 +32,10 @@ public class ClientEntity {
     @Override
     public String toString() {
         return "ClientEntity{" +
-                "clientId=" + clientId +
-                ", ownedCars=" + ownedCars +
-                ", car=" + car +
-                ", personalData=" + personalData +
-                '}';
+               "clientId=" + clientId +
+               ", ownedCars=" + previouslyOwnedCars +
+               ", car=" + car.toString() +
+               ", personalData=" + personalData +
+               '}';
     }
 }

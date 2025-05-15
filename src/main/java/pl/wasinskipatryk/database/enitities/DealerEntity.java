@@ -28,4 +28,12 @@ public class DealerEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "dealer", cascade = CascadeType.ALL)
     private List<SaleEntity> sales;
+
+    @Override
+    public String toString() {
+        return "DealerEntity{" +
+               "dealerId=" + dealerId +
+
+               '}';
+    }
 }

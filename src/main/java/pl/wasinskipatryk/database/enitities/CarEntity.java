@@ -26,6 +26,15 @@ public class CarEntity {
 
     @Column(name = "buy_car_price")
     private BigDecimal buyCarPrice;
+
+    @Override
+    public String toString() {
+        return "CarEntity{" +
+               "carId=" + carId +
+               ", carDetails=" + carDetails +
+               ", buyCarPrice=" + buyCarPrice +
+               '}';
+    }
 }
 
 

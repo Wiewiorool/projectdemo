@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-
 public class PersonalDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +22,12 @@ public class PersonalDataEntity {
     @Column(name = "surname")
     private String surname;
 
+    @Override
+    public String toString() {
+        return "PersonalDataEntity{" +
+               "personalDataId=" + personalDataId +
+               ", name='" + name + '\'' +
+               ", surname='" + surname + '\'' +
+               '}';
+    }
 }
