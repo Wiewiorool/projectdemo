@@ -122,4 +122,20 @@ public class SalesService {
         // Zapisujemy go do bazy danych.
         return clientRepository.save(newClient);
     }
+
+    /**
+     * This method should return sale linked to the client with provided surname.
+     * Meaning, if client with surname "Kovalski" has 1 sale, this method should return this sale.
+     * If such client doesn't exist, the method should throw an exception.
+     * If there are more clients with provided surname, the method should throw an exception.
+     *
+     * @param clientSurname - surname of a new client. This client has never been a client in our saloon so far.
+     * @throws IllegalArgumentException - if no client exists with provided surname
+     * @throws IllegalStateException - if two or more clients exists with provided surname
+     *
+     * @return sale for that client
+     */
+    public SaleEntity getSaleByClientSurname(String clientSurname) {
+
+    }
 }
