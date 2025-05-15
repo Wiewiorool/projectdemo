@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.wasinskipatryk.database.enitities.CarEntity;
 
 @Repository
-public interface CarRepository extends JpaRepository<CarEntity,Long> {
+public interface CarRepository extends JpaRepository<CarEntity, Long> {
 }

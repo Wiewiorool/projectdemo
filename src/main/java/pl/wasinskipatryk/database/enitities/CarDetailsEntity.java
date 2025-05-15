@@ -38,4 +38,16 @@ public class CarDetailsEntity {
     @JoinColumn(name = "type_of_car_id")
     private TypeOfCarEntity typeOfCar;
 
+    @Override
+    public String toString() {
+        return "CarDetailsEntity{" +
+               "carDetailsId=" + carDetailsId +
+               ", modelName='" + modelName + '\'' +
+               ", color='" + color + '\'' +
+               ", productionYear=" + productionYear +
+               ", horsePower=" + horsePower +
+               ", numberOfDoors=" + numberOfDoors +
+               ", typeOfCar=" + typeOfCar +
+               '}';
+    }
 }

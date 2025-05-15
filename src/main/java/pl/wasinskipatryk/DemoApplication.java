@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import pl.wasinskipatryk.database.enitities.*;
 import pl.wasinskipatryk.database.repositories.*;
+import pl.wasinskipatryk.database.service.SalesService;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -64,7 +65,7 @@ public class DemoApplication {
 
         ClientEntity clientEntity = ClientEntity.builder()
                 .personalData(personalDataEntityClient)
-                .ownedCars(1)
+                .previouslyOwnedCars(1)
                 .car(carEntity)
                 .build();
 
@@ -77,26 +78,22 @@ public class DemoApplication {
 
         SaleEntity saleEntity = SaleEntity.builder()
                 .dealer(dealerEntity)
-                .clientId(clientEntity)
+                .client(clientEntity)
                 .car(carEntity)
                 .date(Instant.parse("2026-01-01T00:00:00Z"))
-                .sellCarPrice(BigDecimal.valueOf(100000))
+                .sellCarPrice(BigDecimal.valueOf(100_000))
                 .build();
 
-        saleRepository.save(saleEntity);
+        SaleEntity newSale1 = saleRepository.save(saleEntity);
 
-        System.out.println("CLIENTS:");
-        List<ClientEntity> all = clientRepository.findAll();
-        for (ClientEntity entity : all) {
-            System.out.println(entity);
-        }
-        System.out.println("SALES:");
-        List<SaleEntity> sales = saleRepository.findAll();
-        for (SaleEntity sale : sales) {
-            System.out.println(sale);
-        }
-        System.out.println(clientRepository.findAll());
+        DealerEntity dealer1 = newSale1.getDealer();
+        CarEntity car1 = newSale1.getCar();
+
+        SalesService salesService =  context.getBean(SalesService.class);
+        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "NoSurname", car1.getCarId(), 1.8);
+        System.out.println(saleRepository.findById(newSaleId).get());
     }
+
 
     private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()

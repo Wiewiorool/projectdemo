@@ -27,7 +27,7 @@ public class SaleEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
-    private ClientEntity clientId;
+    private ClientEntity client;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
@@ -42,12 +42,12 @@ public class SaleEntity {
     @Override
     public String toString() {
         return "SaleEntity{" +
-                "saleId=" + saleId +
-                ", dealer=" + dealer +
-                ", clientId=" + clientId +
-                ", car=" + car +
-                ", date=" + date +
-                ", sellCarPrice=" + sellCarPrice +
-                '}';
+               "saleId=" + saleId +
+               ", dealer=" + dealer +
+               ", clientId=" + client +
+               ", car=" + car +
+               ", date=" + date +
+               ", sellCarPrice=" + sellCarPrice +
+               '}';
     }
 }
