@@ -5,7 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import pl.wasinskipatryk.database.enitities.*;
-import pl.wasinskipatryk.database.repositories.*;
+import pl.wasinskipatryk.database.repositories.ClientRepository;
+import pl.wasinskipatryk.database.repositories.SaleRepository;
 import pl.wasinskipatryk.database.service.SalesService;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
@@ -15,8 +16,8 @@ import pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsFileBasedRepository
 import pl.wasinskipatryk.demo.cardetailsrepository.CarDetailsRepository;
 import pl.wasinskipatryk.demo.carpricerepository.CarPriceFileBasedRepository;
 import pl.wasinskipatryk.demo.carpricerepository.CarPriceRepository;
-import pl.wasinskipatryk.demo.carsrepository.CarsRepository;
 import pl.wasinskipatryk.demo.carsrepository.CarFileBasedRepository;
+import pl.wasinskipatryk.demo.carsrepository.CarsRepository;
 import pl.wasinskipatryk.demo.carsrepository.ListBasedCarsRepository;
 import pl.wasinskipatryk.demo.client.Client;
 import pl.wasinskipatryk.demo.dealer.Dealer;
@@ -89,9 +90,14 @@ public class DemoApplication {
         DealerEntity dealer1 = newSale1.getDealer();
         CarEntity car1 = newSale1.getCar();
 
-        SalesService salesService =  context.getBean(SalesService.class);
-        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "NoSurname", car1.getCarId(), 1.8);
-        System.out.println(saleRepository.findById(newSaleId).get());
+        SalesService salesService = context.getBean(SalesService.class);
+        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "Kovalski", car1.getCarId(), 1.8);
+        //System.out.println(saleRepository.findById(newSaleId).get());
+
+        SaleEntity sale = salesService.getSaleByClientSurname("Kovalski");
+        System.out.println("ID: " + sale.getSaleId() + " " + "Client: " + sale.getClient().getPersonalData().getSurname());
+
+
     }
 
 

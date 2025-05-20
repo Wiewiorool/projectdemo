@@ -135,7 +135,7 @@ public class SalesService {
      * @throws IllegalArgumentException - if no client exists with provided surname
      * @throws IllegalStateException    - if two or more clients exists with provided surname
      */
-    public SaleEntity getSaleByClientSurname(String clientName, String clientSurname, CarEntity carEntity, BigDecimal sellCarPrice, DealerEntity dealerEntity) {
+    public SaleEntity getSaleByClientSurname(String clientSurname) {
         // 1. Szukamy klienta o danym nazwisku w bazie danych.
         Collection<ClientEntity> optionalClientEntity = clientRepository.findAllUsers(clientSurname);
 
@@ -144,43 +144,19 @@ public class SalesService {
             log.info("Client doesnt exist");
             throw new IllegalArgumentException("Client not found");
         }
-        //2 Stworzenie nowego clienta + zapisanie go w bazie danych. Użyłem metody już wcześniej stworzonej.
-        ClientEntity clientOne = addNewClient(clientName, clientSurname, carEntity);
-        clientRepository.save(clientOne); // czy tutaj musi być save? W metodzie w sumie juz mamy jedno save?
-        log.info("Add new client{} in to data base", clientOne);
-
-        //3. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
+        //2. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
         if (optionalClientEntity.size() < 2) {
             log.info("Its more than one client with surname: " + clientSurname);
             throw new IllegalStateException("Client found");
 
         }
-        //4. Jezeli istnieje tylko client z 1 salem, returnujemy sale
+        //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
         if (optionalClientEntity.size() == 1) {
             log.info("Found a client");
+
+
         }
-        // 5. tworzymy  zmienną dla date. Przypisujemy do niej wartość aktualnego czasu*
-        Instant date = Instant.now();
-
-        //6 Tworzymy nowego dealera
-
-        SaleEntity saleEntity = SaleEntity.builder()
-                .dealer(dealerEntity)
-                .client(clientOne)
-                .car(carEntity)
-                .date(date)
-                .sellCarPrice(sellCarPrice)
-                .build();
-        SaleEntity savedNewSale = saleRepository.save(saleEntity);
-        String surname = savedNewSale.getClient().getPersonalData().getSurname();
-        log.info("Saved new sale for client " + surname);
-        return getSaleInfo(saleEntity);
-    }
-
-    //7 Stworzenie metoy zeby mozna bylo zwrocic stringa w glownej metodzie getSaleByClientSurname
-    public SaleEntity getSaleInfo(SaleEntity saleEntity) {
-        log.info(saleEntity.getSaleId() + " " + saleEntity.getClient().getPersonalData().getSurname());
-        return saleEntity;
+        return getSaleByClientSurname(clientSurname);
     }
 
 }
