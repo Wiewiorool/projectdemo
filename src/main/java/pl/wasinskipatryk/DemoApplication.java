@@ -95,7 +95,13 @@ public class DemoApplication {
         //System.out.println(saleRepository.findById(newSaleId).get());
 
         SaleEntity sale = salesService.getSaleByClientSurname("Kovalski");
-        System.out.println("ID: " + sale.getSaleId() + " " + "Client: " + sale.getClient().getPersonalData().getSurname());
+        System.out.println("Sale ID: " + sale.getSaleId() + " "
+                + "Dealer ID: " + sale.getDealer() + " "
+                + "Client ID: " + sale.getClient().getClientId() + " "
+                + "Car ID: " + sale.getCar().getCarId() + " "
+                + "Date: " + sale.getDate() + " "
+                + "Sell car price: " + sale.getSellCarPrice() + " "
+                + "Client: " + sale.getClient().getPersonalData().getSurname());
 
 
     }

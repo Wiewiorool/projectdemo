@@ -12,7 +12,7 @@ import pl.wasinskipatryk.database.repositories.SaleRepository;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -137,7 +137,7 @@ public class SalesService {
      */
     public SaleEntity getSaleByClientSurname(String clientSurname) {
         // 1. Szukamy klienta o danym nazwisku w bazie danych.
-        Collection<ClientEntity> optionalClientEntity = clientRepository.findAllUsers(clientSurname);
+        List<ClientEntity> optionalClientEntity = clientRepository.findAllUsers(clientSurname);
 
         //1a Sprawdzamy czy klient o danym nazwisku istnieje. Nie istnieje więc wyrzucamy exception
         if (optionalClientEntity.isEmpty()) {
@@ -152,11 +152,11 @@ public class SalesService {
         }
         //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
         if (optionalClientEntity.size() == 1) {
-            log.info("Found a client");
-
+            log.info("Client found");
 
         }
-        return getSaleByClientSurname(clientSurname);
+        List<SaleEntity> usersSale = saleRepository.findUsersSale();
+        return usersSale.getFirst();
     }
 
 }
