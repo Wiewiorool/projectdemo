@@ -61,7 +61,7 @@ public class DemoApplication {
 
         PersonalDataEntity personalDataEntityClient = PersonalDataEntity.builder()
                 .name("Josef")
-                .surname("Kovalski")
+                .surname("As")
                 .build();
 
         ClientEntity clientEntity = ClientEntity.builder()
@@ -91,10 +91,10 @@ public class DemoApplication {
         CarEntity car1 = newSale1.getCar();
 
         SalesService salesService = context.getBean(SalesService.class);
-        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "Kovalski", car1.getCarId(), 1.8);
+        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "NoName", car1.getCarId(), 1.8);
         //System.out.println(saleRepository.findById(newSaleId).get());
 
-        SaleEntity sale = salesService.getSaleByClientSurname("Kovalski");
+        SaleEntity sale = salesService.getSaleByClientSurname("As");
         System.out.println("Sale ID: " + sale.getSaleId() + " "
                 + "Dealer ID: " + sale.getDealer() + " "
                 + "Client ID: " + sale.getClient().getClientId() + " "

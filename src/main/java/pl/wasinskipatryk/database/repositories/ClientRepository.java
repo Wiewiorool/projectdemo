@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
-    @Query(value = "SELECT c.* FROM Client c INNER JOIN Personal_data p ON c.personal_data_id = p.personal_data_id WHERE p.surname = :clientSurname", nativeQuery = true)
+    @Query(value = "SELECT p.surname, c.* FROM Client c JOIN Personal_data p ON c.personal_data_id = p.personal_data_id WHERE p.surname = :clientSurname", nativeQuery = true)
     List<ClientEntity> findAllUsers(@Param("clientSurname") String surname);
 }

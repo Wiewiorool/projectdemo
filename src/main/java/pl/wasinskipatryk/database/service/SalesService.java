@@ -143,19 +143,27 @@ public class SalesService {
         if (optionalClientEntity.isEmpty()) {
             log.info("Client doesnt exist");
             throw new IllegalArgumentException("Client not found");
-        }
-        //2. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
-        if (optionalClientEntity.size() < 2) {
+        } else if
+            //2. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
+        (optionalClientEntity.size() > 1) {
             log.info("Its more than one client with surname: " + clientSurname);
-            throw new IllegalStateException("Client found");
-
-        }
-        //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
-        if (optionalClientEntity.size() == 1) {
+            throw new IllegalStateException("More than one CLIENT ");
+        } else {
+            //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
             log.info("Client found");
 
         }
-        List<SaleEntity> usersSale = saleRepository.findUsersSale();
+        ClientEntity client = optionalClientEntity.getFirst();
+
+        List<SaleEntity> usersSale = saleRepository.findUsersSale(client.getClientId());
+        if (usersSale.isEmpty()) {
+            log.info("No sales found");
+            throw new IllegalStateException("No sales found");
+        }
+        if (usersSale.size() > 1) {
+            log.info("More than 1 sale found");
+            throw new IllegalStateException("More than 1 sale found");
+        }
         return usersSale.getFirst();
     }
 
