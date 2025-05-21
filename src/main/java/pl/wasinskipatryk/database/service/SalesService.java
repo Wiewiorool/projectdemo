@@ -1,6 +1,5 @@
 package pl.wasinskipatryk.database.service;
 
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,8 @@ import pl.wasinskipatryk.database.repositories.SaleRepository;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,10 +27,10 @@ public class SalesService {
 
 
     public SalesService(
-        @Autowired ClientRepository clientRepository,
-        @Autowired SaleRepository saleRepository,
-        @Autowired CarRepository carRepository,
-        @Autowired DealerRepository dealerRepository
+            @Autowired ClientRepository clientRepository,
+            @Autowired SaleRepository saleRepository,
+            @Autowired CarRepository carRepository,
+            @Autowired DealerRepository dealerRepository
     ) {
         this.clientRepository = clientRepository;
         this.saleRepository = saleRepository;
@@ -49,7 +50,7 @@ public class SalesService {
      * @param clientName    - first name of a new client. This client has never been a client in our saloon so far.
      * @param clientSurname - surname of a new client. This client has never been a client in our saloon so far.
      * @param carId         - id of the sold car. This car should already exist in our IT system.
-     * @param commission     - commission added to the car's buyPrice.
+     * @param commission    - commission added to the car's buyPrice.
      *                      Example: if the saloon bought the car for 1000 PLN and commission is 1.8,
      *                      then it means the car was sold in the sale for 1000 * 1.8 = 1800 PLN.
      * @return id of the newly created sale.
@@ -99,12 +100,12 @@ public class SalesService {
 
         // 6. tworzymy nowe saleEntity i zapisujemy go do bazy danych -> saleRepository.save(newSale);
         SaleEntity newSale = SaleEntity.builder()
-            .dealer(dealerEntity)
-            .client(clientEntity)
-            .car(carEntity)
-            .date(date)
-            .sellCarPrice(sellCarPrice)
-            .build();
+                .dealer(dealerEntity)
+                .client(clientEntity)
+                .car(carEntity)
+                .date(date)
+                .sellCarPrice(sellCarPrice)
+                .build();
         SaleEntity savedNewSale = saleRepository.save(newSale);
         log.info("saved new sale with id " + savedNewSale.getSaleId());
         return savedNewSale.getSaleId();
@@ -112,14 +113,58 @@ public class SalesService {
 
     public ClientEntity addNewClient(String clientName, String clientSurname, CarEntity carEntity) {
         ClientEntity newClient = ClientEntity.builder()
-            .previouslyOwnedCars(0)
-            .car(carEntity)
-            .personalData(PersonalDataEntity.builder()
-                    .name(clientName)
-                    .surname(clientSurname)
-                    .build())
-            .build();
+                .previouslyOwnedCars(0)
+                .car(carEntity)
+                .personalData(PersonalDataEntity.builder()
+                        .name(clientName)
+                        .surname(clientSurname)
+                        .build())
+                .build();
         // Zapisujemy go do bazy danych.
         return clientRepository.save(newClient);
     }
+
+    /**
+     * This method should return sale linked to the client with provided surname.
+     * Meaning, if client with surname "Kovalski" has 1 sale, this method should return this sale.
+     * If such client doesn't exist, the method should throw an exception.
+     * If there are more clients with provided surname, the method should throw an exception.
+     *
+     * @param clientSurname - surname of a new client. This client has never been a client in our saloon so far.
+     * @return sale for that client
+     * @throws IllegalArgumentException - if no client exists with provided surname
+     * @throws IllegalStateException    - if two or more clients exists with provided surname
+     */
+    public SaleEntity getSaleByClientSurname(String clientSurname) {
+        // 1. Szukamy klienta o danym nazwisku w bazie danych.
+        List<ClientEntity> optionalClientEntity = clientRepository.findAllUsers(clientSurname);
+
+        //1a Sprawdzamy czy klient o danym nazwisku istnieje. Nie istnieje więc wyrzucamy exception
+        if (optionalClientEntity.isEmpty()) {
+            log.info("Client doesnt exist");
+            throw new IllegalArgumentException("Client not found");
+        } else if
+            //2. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
+        (optionalClientEntity.size() > 1) {
+            log.info("Its more than one client with surname: " + clientSurname);
+            throw new IllegalStateException("More than one CLIENT ");
+        } else {
+            //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
+            log.info("Client found");
+
+        }
+        ClientEntity client = optionalClientEntity.getFirst();
+
+        List<SaleEntity> usersSale = saleRepository.findUsersSale(client.getClientId());
+        if (usersSale.isEmpty()) {
+            log.info("No sales found");
+            throw new IllegalStateException("No sales found");
+        }
+        if (usersSale.size() > 1) {
+            log.info("More than 1 sale found");
+            throw new IllegalStateException("More than 1 sale found");
+        }
+        return usersSale.getFirst();
+    }
+
 }
