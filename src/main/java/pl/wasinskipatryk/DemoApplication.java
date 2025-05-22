@@ -92,18 +92,19 @@ public class DemoApplication {
         CarEntity car1 = newSale1.getCar();
 
         SalesService salesService = context.getBean(SalesService.class);
-        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "NoName", car1.getCarId(), 1.8);
-        //System.out.println(saleRepository.findById(newSaleId).get());
+        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
+                "NoName", "NoName", car1.getCarId(), 1.8);
+        System.out.println(saleRepository.findById(newSaleId).get());
 
-        /*SaleEntity sale = salesService.getSaleByClientSurname("As");
-        System.out.println("Sale ID: " + sale.getSaleId() + " "
-                + "Dealer ID: " + sale.getDealer() + " "
-                + "Client ID: " + sale.getClient().getClientId() + " "
-                + "Car ID: " + sale.getCar().getCarId() + " "
-                + "Date: " + sale.getDate() + " "
-                + "Sell car price: " + sale.getSellCarPrice() + " "
-                + "Client: " + sale.getClient().getPersonalData().getSurname());
-        */
+        SaleEntity sale = salesService.getSaleByClientSurname("As");
+        System.out.println("Sale ID: " + sale.getSaleId()
+                + " Dealer ID: " + sale.getDealer()
+                + " Client ID: " + sale.getClient().getClientId()
+                + " Car ID: " + sale.getCar().getCarId()
+                + " Date: " + sale.getDate()
+                + " Sell car price: " + sale.getSellCarPrice()
+                + " Client: " + sale.getClient().getPersonalData().getSurname());
+
         ClientService clientService = context.getBean(ClientService.class);
         ClientEntity clientEntity1 = clientService.findClientForCarId(car1.getCarId());
         System.out.println(clientEntity1);

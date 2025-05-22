@@ -18,13 +18,11 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class SalesService {
-
-    private ClientRepository clientRepository;
-    private SaleRepository saleRepository;
-    private CarRepository carRepository;
-    private DealerRepository dealerRepository;
+    private final ClientRepository clientRepository;
+    private final SaleRepository saleRepository;
+    private final CarRepository carRepository;
+    private final DealerRepository dealerRepository;
     // you may change the fields. Remember to write tests.
-
 
     public SalesService(
             @Autowired ClientRepository clientRepository,
@@ -111,7 +109,10 @@ public class SalesService {
         return savedNewSale.getSaleId();
     }
 
-    public ClientEntity addNewClient(String clientName, String clientSurname, CarEntity carEntity) {
+    public ClientEntity addNewClient(String clientName,
+                                     String clientSurname,
+                                     CarEntity carEntity
+    ) {
         ClientEntity newClient = ClientEntity.builder()
                 .previouslyOwnedCars(0)
                 .car(carEntity)
@@ -147,15 +148,15 @@ public class SalesService {
             //2. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
         (optionalClientEntity.size() > 1) {
             log.info("Its more than one client with surname: " + clientSurname);
-            throw new IllegalStateException("More than one CLIENT ");
+            throw new IllegalStateException("More than one CLIENT");
         } else {
             //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
             log.info("Client found");
-
         }
         ClientEntity client = optionalClientEntity.getFirst();
 
         List<SaleEntity> usersSale = saleRepository.findUsersSale(client.getClientId());
+
         if (usersSale.isEmpty()) {
             log.info("No sales found");
             throw new IllegalStateException("No sales found");
