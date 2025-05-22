@@ -105,7 +105,7 @@ public class DemoApplication {
                 + "Client: " + sale.getClient().getPersonalData().getSurname());
         */
         ClientService clientService = context.getBean(ClientService.class);
-        ClientEntity clientEntity1 = clientService.client(car1.getCarId());
+        ClientEntity clientEntity1 = clientService.findClientForCarId(car1.getCarId());
         System.out.println(clientEntity1);
 
 

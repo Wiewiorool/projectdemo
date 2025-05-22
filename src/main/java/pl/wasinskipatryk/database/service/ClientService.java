@@ -10,28 +10,24 @@ import java.util.List;
 
 @Slf4j
 @Service
-
 public class ClientService {
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-    public ClientService(
-            @Autowired ClientRepository clientRepository) {
+    public ClientService(@Autowired ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
-    public ClientEntity client(Long carId) {
-        List<ClientEntity> clientsCarId = clientRepository.findCarId(carId);
+    public ClientEntity findClientForCarId(Long carId) {
+        List<ClientEntity> clients = clientRepository.findByCarId(carId);
 
-        if (clientsCarId.isEmpty()) {
-            log.info("Client not found for that car id " + clientsCarId);
+        if (clients.isEmpty()) {
+            log.info("Client not found for that car id " + clients);
             throw new IllegalStateException("Client not found");
-        } else if (clientsCarId.size() == 1) {
-            return clientsCarId.getFirst();
-        } else {
-            log.info("Found more than one client for that car id " + clientsCarId);
+        }
+        if (clients.size() > 1) {
+            log.info("Found more than one client for that car id " + clients);
             throw new IllegalStateException("Found more than one client");
         }
-
+        return clients.getFirst();
     }
-
 }
