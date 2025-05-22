@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import pl.wasinskipatryk.database.enitities.*;
 import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
+import pl.wasinskipatryk.database.service.ClientService;
 import pl.wasinskipatryk.database.service.SalesService;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
@@ -94,7 +95,7 @@ public class DemoApplication {
         long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "NoName", car1.getCarId(), 1.8);
         //System.out.println(saleRepository.findById(newSaleId).get());
 
-        SaleEntity sale = salesService.getSaleByClientSurname("As");
+        /*SaleEntity sale = salesService.getSaleByClientSurname("As");
         System.out.println("Sale ID: " + sale.getSaleId() + " "
                 + "Dealer ID: " + sale.getDealer() + " "
                 + "Client ID: " + sale.getClient().getClientId() + " "
@@ -102,6 +103,10 @@ public class DemoApplication {
                 + "Date: " + sale.getDate() + " "
                 + "Sell car price: " + sale.getSellCarPrice() + " "
                 + "Client: " + sale.getClient().getPersonalData().getSurname());
+        */
+        ClientService clientService = context.getBean(ClientService.class);
+        ClientEntity clientEntity1 = clientService.findClientForCarId(car1.getCarId());
+        System.out.println(clientEntity1);
 
 
     }
