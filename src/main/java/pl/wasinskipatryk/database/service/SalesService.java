@@ -54,7 +54,6 @@ public class SalesService {
      */
     @Transactional
     public long registerNewSale(long dealerId, String clientName, String clientSurname, long carId, double commission) {
-
         Optional<DealerEntity> dealerEntityOptional = dealerRepository.findById(dealerId);
 
         if (dealerEntityOptional.isEmpty()) {
