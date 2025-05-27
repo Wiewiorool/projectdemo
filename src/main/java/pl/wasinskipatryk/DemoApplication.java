@@ -110,7 +110,7 @@ public class DemoApplication {
 
         CarService carService = context.getBean(CarService.class);
         long addNewCar = carService.addNewCar("Ania", "Różowy", 2025,
-                200, 5, TypeOfCar.SEDAN, BigDecimal.valueOf(10_000));
+                200, 5, TypeOfCar.KOMBI, BigDecimal.valueOf(10_000));
         System.out.println(addNewCar);
 
 

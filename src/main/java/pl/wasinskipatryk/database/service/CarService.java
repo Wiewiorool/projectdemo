@@ -31,6 +31,12 @@ public class CarService {
             int horsePower, int nrOfDoors, TypeOfCar typeOfCar, BigDecimal buyPrice) {
         TypeOfCarEntity typeOfCarEntity = typeOfCarRepository.findByTypeOfCar(String.valueOf(typeOfCar));
 
+        if(typeOfCarEntity == null){
+            typeOfCarEntity = TypeOfCarEntity.builder()
+                    .value(String.valueOf(typeOfCar))
+                    .build();
+        }
+
         CarDetailsEntity carDetails = CarDetailsEntity.builder()
                 .modelName(modelName)
                 .color(colour)
