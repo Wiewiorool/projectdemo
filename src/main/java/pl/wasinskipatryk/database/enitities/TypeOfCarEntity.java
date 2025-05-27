@@ -20,5 +20,4 @@ public class TypeOfCarEntity {
     @Column(name = "value")
     private String value;
 
-
 }
