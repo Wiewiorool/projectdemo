@@ -32,6 +32,10 @@ import java.util.List;
 @SpringBootApplication
 public class DemoApplication {
 
+    private static final String nameNoName = "NoName";
+    private static final String surnameNoName = "NoName";
+    private static final double margin = 1.8;
+
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         ClientRepository clientRepository = context.getBean(ClientRepository.class);
@@ -71,7 +75,6 @@ public class DemoApplication {
                 .car(carEntity)
                 .build();
 
-
         DealerEntity dealerEntity = DealerEntity.builder()
                 .degree("degree2")
                 .personalData(personalDataEntityDealer)
@@ -92,25 +95,18 @@ public class DemoApplication {
         CarEntity car1 = newSale1.getCar();
 
         SalesService salesService = context.getBean(SalesService.class);
-        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(), "NoName", "NoName", car1.getCarId(), 1.8);
-        //System.out.println(saleRepository.findById(newSaleId).get());
+        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
+                nameNoName, surnameNoName, car1.getCarId(), margin);
+        System.out.println(saleRepository.findById(newSaleId).get());
 
-        /*SaleEntity sale = salesService.getSaleByClientSurname("As");
-        System.out.println("Sale ID: " + sale.getSaleId() + " "
-                + "Dealer ID: " + sale.getDealer() + " "
-                + "Client ID: " + sale.getClient().getClientId() + " "
-                + "Car ID: " + sale.getCar().getCarId() + " "
-                + "Date: " + sale.getDate() + " "
-                + "Sell car price: " + sale.getSellCarPrice() + " "
-                + "Client: " + sale.getClient().getPersonalData().getSurname());
-        */
+        SaleEntity sale = salesService.getSaleByClientSurname("As");
+        System.out.println(sale);
+
         ClientService clientService = context.getBean(ClientService.class);
         ClientEntity clientEntity1 = clientService.findClientForCarId(car1.getCarId());
         System.out.println(clientEntity1);
 
-
     }
-
 
     private static void versionOne() {
         Dealer dealer = new Dealer.DealerBuilder()
@@ -147,7 +143,6 @@ public class DemoApplication {
         CarDetailsRepository carDetailsRepository = new CarDetailsFileBasedRepository();
         CarPriceRepository carPriceRepository = new CarPriceFileBasedRepository();
         CarsRepository carsRepository = new CarFileBasedRepository(carDetailsRepository, carPriceRepository);
-
 
         //System.out.println(carsRepository.findByModelName("toyota"));
         carsRepository.add(car);

@@ -18,13 +18,10 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class SalesService {
-
-    private ClientRepository clientRepository;
-    private SaleRepository saleRepository;
-    private CarRepository carRepository;
-    private DealerRepository dealerRepository;
-    // you may change the fields. Remember to write tests.
-
+    private final ClientRepository clientRepository;
+    private final SaleRepository saleRepository;
+    private final CarRepository carRepository;
+    private final DealerRepository dealerRepository;
 
     public SalesService(
             @Autowired ClientRepository clientRepository,
@@ -57,48 +54,22 @@ public class SalesService {
      */
     @Transactional
     public long registerNewSale(long dealerId, String clientName, String clientSurname, long carId, double commission) {
-
-        // This method will save a new deal. --> na koncu
-        //     * Dealer must be found in the system. --> 1. szukamy dealera o id dealerId w bazie danych. Przypisujemy do
-        //     zmiennej.
-        //     * Client must be created and saved as a new client. --> 2. tworzymy nowego klienta (clientEntity). Zapisujemy go
-        //     do bazy danych. Przypisujemy wynik (zapisania do bazy danych) do zmiennej.
-        //     * Car must be found in the system. -> 3. szukamy cara o id carId w bazie danych. Przypisujemy do zmiennej.
-        //     * Using all the data, a new sale should be created and saved into the database. --> 5. tworzymy nowe
-        //     saleEntity i zapisujemy go do bazy danych -> saleRepository.save(newSale);
-        //     * Date of the sale is assumed to be equal to the current time when the method will be run. ---> 4. tworzymy
-        //     zmienną dla date. Przypisujemy do niej wartość aktualnego czasu* (* - jak poznać aktualny czas w kodzie)
-
-        // 1. szukamy dealera o id dealerId w bazie danych.
         Optional<DealerEntity> dealerEntityOptional = dealerRepository.findById(dealerId);
-        // 1a. jeśli nie istnieje to rzucamy wyjątkiem, bo powinien
+
         if (dealerEntityOptional.isEmpty()) {
             log.info("dealer " + dealerId + " was supposed to be int he system but can't find him");
             throw new IllegalArgumentException("Dealer not found");
         }
-        // 1b. Przypisujemy do zmiennej
         DealerEntity dealerEntity = dealerEntityOptional.get();
 
-        // 3. szukamy cara o id carId w bazie danych. Przypisujemy do zmiennej.
         CarEntity carEntity = carRepository.findById(carId).get();
 
-        // 2.  tworzymy nowego klienta (clientEntity).
-        //  Przypisujemy wynik (zapisania do bazy danych) do zmiennej.
         ClientEntity clientEntity = addNewClient(clientName, clientSurname, carEntity);
 
-        // 4. tworzymy  zmienną dla date. Przypisujemy do niej wartość aktualnego czasu*
         Instant date = Instant.now();
-//        LocalDate
-//        LocalTime
-//        ZonedDateTime
-//        Instant
-//        Date
-//        LocalDateTime
 
-        // 5. obliczamy cenę sprzedażową auta
         BigDecimal sellCarPrice = carEntity.getBuyCarPrice().multiply(BigDecimal.valueOf(commission));
 
-        // 6. tworzymy nowe saleEntity i zapisujemy go do bazy danych -> saleRepository.save(newSale);
         SaleEntity newSale = SaleEntity.builder()
                 .dealer(dealerEntity)
                 .client(clientEntity)
@@ -111,7 +82,10 @@ public class SalesService {
         return savedNewSale.getSaleId();
     }
 
-    public ClientEntity addNewClient(String clientName, String clientSurname, CarEntity carEntity) {
+    public ClientEntity addNewClient(String clientName,
+                                     String clientSurname,
+                                     CarEntity carEntity
+    ) {
         ClientEntity newClient = ClientEntity.builder()
                 .previouslyOwnedCars(0)
                 .car(carEntity)
@@ -120,7 +94,6 @@ public class SalesService {
                         .surname(clientSurname)
                         .build())
                 .build();
-        // Zapisujemy go do bazy danych.
         return clientRepository.save(newClient);
     }
 
@@ -136,26 +109,22 @@ public class SalesService {
      * @throws IllegalStateException    - if two or more clients exists with provided surname
      */
     public SaleEntity getSaleByClientSurname(String clientSurname) {
-        // 1. Szukamy klienta o danym nazwisku w bazie danych.
         List<ClientEntity> optionalClientEntity = clientRepository.findAllUsers(clientSurname);
 
-        //1a Sprawdzamy czy klient o danym nazwisku istnieje. Nie istnieje więc wyrzucamy exception
         if (optionalClientEntity.isEmpty()) {
             log.info("Client doesnt exist");
             throw new IllegalArgumentException("Client not found");
         } else if
-            //2. Jeżeli istnieje wiecej niz 1 client o tym sammy nazwisku.
         (optionalClientEntity.size() > 1) {
             log.info("Its more than one client with surname: " + clientSurname);
-            throw new IllegalStateException("More than one CLIENT ");
+            throw new IllegalStateException("More than one client");
         } else {
-            //3. Jezeli istnieje tylko client z 1 salem, returnujemy sale
             log.info("Client found");
-
         }
         ClientEntity client = optionalClientEntity.getFirst();
 
         List<SaleEntity> usersSale = saleRepository.findUsersSale(client.getClientId());
+
         if (usersSale.isEmpty()) {
             log.info("No sales found");
             throw new IllegalStateException("No sales found");
