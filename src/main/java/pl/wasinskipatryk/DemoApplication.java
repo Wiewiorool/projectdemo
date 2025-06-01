@@ -8,8 +8,6 @@ import pl.wasinskipatryk.database.enitities.*;
 import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 import pl.wasinskipatryk.database.service.CarService;
-import pl.wasinskipatryk.database.service.ClientService;
-import pl.wasinskipatryk.database.service.SalesService;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -91,10 +89,10 @@ public class DemoApplication {
                 .sellCarPrice(BigDecimal.valueOf(100_000))
                 .build();
 
-        SaleEntity newSale1 = saleRepository.save(saleEntity);
+      /*  SaleEntity newSale1 = saleRepository.save(saleEntity);
 
         DealerEntity dealer1 = newSale1.getDealer();
-        CarEntity car1 = newSale1.getCar();
+        CarEntity car1 = newSale1.getCar();*/
 
        /* SalesService salesService = context.getBean(SalesService.class);
         long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
@@ -109,9 +107,10 @@ public class DemoApplication {
         System.out.println(clientEntity1);*/
 
         CarService carService = context.getBean(CarService.class);
-        long addNewCar = carService.addNewCar("Ania", "Różowy", 2025,
-                200, 5, TypeOfCar.KOMBI, BigDecimal.valueOf(10_000));
+        long addNewCar = carService.addNewCar("Audi", "Black", 2025,
+                250, 5, TypeOfCar.KOMBI, BigDecimal.valueOf(10_000));
         System.out.println(addNewCar);
+
 
 
     }

@@ -34,7 +34,8 @@ public class CarDetailsEntity {
     @Column(name = "number_of_doors")
     private int numberOfDoors;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    //@ManyToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "type_of_car_id")
     private TypeOfCarEntity typeOfCar;
 
