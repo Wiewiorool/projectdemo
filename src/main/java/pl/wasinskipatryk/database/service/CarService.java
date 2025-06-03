@@ -33,7 +33,7 @@ public class CarService {
             int horsePower, int nrOfDoors, TypeOfCar typeOfCar, BigDecimal buyPrice) {
 
         TypeOfCarEntity typeOfCarEntity = typeOfCarRepository.findByTypeOfCar(String.valueOf(typeOfCar));
-        CarDetailsEntity carDetailsEntity;
+        CarDetailsEntity carDetailsEntity = CarDetailsEntity.builder().build();
 
         //Jesli typeOfCar bylo to trzeba poszukac w cardetailsach
         //SELECT *  FROM car_details
@@ -60,7 +60,7 @@ public class CarService {
             if (typeOfCarEntity.getTypeOfCarId() != 0) {
                 log.info("Type of car does exist");
                 carDetailsEntity = carDetailsRepository.findSpecificCarDetails(modelName, colour, horsePower,
-                        nrOfDoors, productionYear, typeOfCar);
+                        nrOfDoors, productionYear, typeOfCarEntity.getTypeOfCarId());
 
                 if (carDetailsEntity == null) {
                     log.info("Car details don't exist");
@@ -70,7 +70,7 @@ public class CarService {
                             .productionYear(productionYear)
                             .horsePower(horsePower)
                             .numberOfDoors(nrOfDoors)
-                            .typeOfCar(typeOfCar)
+                            .typeOfCar(typeOfCarEntity)
                             .build();
                     carDetailsEntity = carDetailsRepository.save(carDetailsEntity);
                 } else {
@@ -82,7 +82,6 @@ public class CarService {
                 .carDetails(carDetailsEntity)
                 .buyCarPrice(buyPrice)
                 .build();
-        CarEntity newCarEntity = carRepository.save(carEntity);
-        return newCarEntity.getCarId();
+        return carEntity.getCarId();
     }
 }

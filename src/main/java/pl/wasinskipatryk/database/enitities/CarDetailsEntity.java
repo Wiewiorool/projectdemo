@@ -1,6 +1,5 @@
 package pl.wasinskipatryk.database.enitities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,8 +33,7 @@ public class CarDetailsEntity {
     @Column(name = "number_of_doors")
     private int numberOfDoors;
 
-    //@ManyToOne(cascade = CascadeType.PERSIST)
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "type_of_car_id")
     private TypeOfCarEntity typeOfCar;
 
