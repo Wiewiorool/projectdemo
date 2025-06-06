@@ -16,7 +16,10 @@ import java.util.Objects;
 
 public class CarDetailsEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Car_details_id_seq")
+    @SequenceGenerator(
+        name = "Car_details_id_seq", sequenceName =
+        "Car_details_id_seq", allocationSize = 1)
     @Column(name = "car_details_id")
     private Long carDetailsId;
 
