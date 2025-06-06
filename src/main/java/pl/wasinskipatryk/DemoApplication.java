@@ -107,8 +107,8 @@ public class DemoApplication {
         System.out.println(clientEntity1);*/
 
         CarService carService = context.getBean(CarService.class);
-        long addNewCar = carService.addNewCar("Audi", "Black", 2025,
-                250, 5, TypeOfCar.KOMBI, BigDecimal.valueOf(10_000));
+        long addNewCar = carService.addNewCar("VW", "Pink", 1999,
+                250, 5, TypeOfCar.SEDAN, BigDecimal.valueOf(10_000));
         System.out.println(addNewCar);
 
 

@@ -1,5 +1,6 @@
 package pl.wasinskipatryk.database.service;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import pl.wasinskipatryk.database.repositories.TypeOfCarRepository;
 import pl.wasinskipatryk.demo.car.TypeOfCar;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,13 +29,12 @@ public class CarService {
         this.carRepository = carRepository;
         this.typeOfCarRepository = typeOfCarRepository;
     }
-
+    @Transactional
     public long addNewCar(
             String modelName, String colour, int productionYear,
             int horsePower, int nrOfDoors, TypeOfCar typeOfCar, BigDecimal buyPrice) {
 
         TypeOfCarEntity typeOfCarEntity = typeOfCarRepository.findByTypeOfCar(String.valueOf(typeOfCar));
-        CarDetailsEntity carDetailsEntity = CarDetailsEntity.builder().build();
 
         //Jesli typeOfCar bylo to trzeba poszukac w cardetailsach
         //SELECT *  FROM car_details
@@ -42,46 +43,52 @@ public class CarService {
 
         if (typeOfCarEntity == null) {
             log.info("Type of car does not exist");
-            typeOfCarEntity = TypeOfCarEntity.builder()
-                    .value(String.valueOf(typeOfCar))
-                    .build();
-            typeOfCarEntity = typeOfCarRepository.save(typeOfCarEntity);
-
-            carDetailsEntity = CarDetailsEntity.builder()
-                    .modelName(modelName)
-                    .color(colour)
-                    .productionYear(productionYear)
-                    .horsePower(horsePower)
-                    .numberOfDoors(nrOfDoors)
-                    .typeOfCar(typeOfCarEntity)
-                    .build();
-            carDetailsEntity = carDetailsRepository.save(carDetailsEntity);
+            CarEntity newSavedCar = saveNewCar(modelName, colour, productionYear, horsePower, nrOfDoors, buyPrice,
+                    TypeOfCarEntity.builder()
+                            .value(String.valueOf(typeOfCar))
+                            .build(),
+                    Optional.empty(),
+                    Optional.empty());
+            return newSavedCar.getCarId();
         } else {
-            if (typeOfCarEntity.getTypeOfCarId() != 0) {
-                log.info("Type of car does exist");
-                carDetailsEntity = carDetailsRepository.findSpecificCarDetails(modelName, colour, horsePower,
-                        nrOfDoors, productionYear, typeOfCarEntity.getTypeOfCarId());
+            log.info("Type of car does exist");
+            CarDetailsEntity carDetailsEntity = carDetailsRepository.findSpecificCarDetails(modelName, colour, horsePower,
+                    nrOfDoors, productionYear, typeOfCarEntity.getTypeOfCarId());
 
-                if (carDetailsEntity == null) {
-                    log.info("Car details don't exist");
-                    carDetailsEntity = CarDetailsEntity.builder()
-                            .modelName(modelName)
-                            .color(colour)
-                            .productionYear(productionYear)
-                            .horsePower(horsePower)
-                            .numberOfDoors(nrOfDoors)
-                            .typeOfCar(typeOfCarEntity)
-                            .build();
-                    carDetailsEntity = carDetailsRepository.save(carDetailsEntity);
-                } else {
-                    log.info("Matching car details found.");
-                }
+            if (carDetailsEntity == null) {
+                log.info("Car details don't exist");
+                CarEntity newSavedCar = saveNewCar(modelName, colour, productionYear, horsePower,
+                        nrOfDoors, buyPrice, typeOfCarEntity, Optional.empty(), Optional.of(typeOfCarEntity.getTypeOfCarId()));
+                return newSavedCar.getCarId();
+            } else {
+                log.info("Matching car details found.");
+                CarEntity newCar = saveNewCar(carDetailsEntity.getModelName(), carDetailsEntity.getColor(), carDetailsEntity.getProductionYear()
+                        , carDetailsEntity.getHorsePower(), carDetailsEntity.getNumberOfDoors(),
+                        buyPrice, typeOfCarEntity, Optional.of(carDetailsEntity.getCarDetailsId()),
+                        Optional.of(typeOfCarEntity.getTypeOfCarId()));
+                return newCar.getCarId();
             }
         }
-        CarEntity carEntity = CarEntity.builder()
-                .carDetails(carDetailsEntity)
+    }
+
+    private CarEntity saveNewCar(String modelName, String colour, int productionYear, int horsePower, int nrOfDoors,
+                                 BigDecimal buyPrice, TypeOfCarEntity typeOfCarEntity, Optional<Long> carDetailsId, Optional<Long> typeOfCarId) {
+//        CarEntity carEntity =
+        CarEntity newSave = carRepository.save(CarEntity.builder()
+                .carDetails(CarDetailsEntity.builder()
+                        .carDetailsId(carDetailsId.orElse(null))
+                        .modelName(modelName)
+                        .color(colour)
+                        .productionYear(productionYear)
+                        .horsePower(horsePower)
+                        .numberOfDoors(nrOfDoors)
+                        .typeOfCar(TypeOfCarEntity.builder()
+                                .typeOfCarId(typeOfCarId.orElse(null))
+                                .value(typeOfCarEntity.getValue())
+                                .build())
+                        .build())
                 .buyCarPrice(buyPrice)
-                .build();
-        return carEntity.getCarId();
+                .build());
+        return newSave;
     }
 }
