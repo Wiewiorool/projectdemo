@@ -57,3 +57,12 @@ FOREIGN KEY (dealer_id) references Dealer(dealer_id) on delete cascade,
 FOREIGN KEY (client_id) references Client(client_id) on delete cascade,
 FOREIGN KEY (car_id) references Car(car_id) on delete cascade
 );
+
+CREATE SEQUENCE Car_details_id_seq;
+SELECT setval('Car_details_id_seq', (SELECT MAX(sp.car_details_id) FROM Car_details sp));
+
+CREATE SEQUENCE Car_id_seq;
+SELECT setval('Car_id_seq', (SELECT MAX(sp.car_id) FROM Car sp));
+
+CREATE SEQUENCE Type_of_car_id_seq;
+SELECT setval('Type_of_car_id_seq', (SELECT MAX(sp.type_of_car_id) FROM Type_of_car sp));

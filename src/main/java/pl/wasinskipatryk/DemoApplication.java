@@ -7,8 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import pl.wasinskipatryk.database.enitities.*;
 import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
-import pl.wasinskipatryk.database.service.ClientService;
-import pl.wasinskipatryk.database.service.SalesService;
+import pl.wasinskipatryk.database.service.CarService;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -40,6 +39,7 @@ public class DemoApplication {
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         ClientRepository clientRepository = context.getBean(ClientRepository.class);
         SaleRepository saleRepository = context.getBean(SaleRepository.class);
+
 
         TypeOfCarEntity typeOfCarEntity = TypeOfCarEntity.builder()
                 .value("Sedan")
@@ -89,22 +89,29 @@ public class DemoApplication {
                 .sellCarPrice(BigDecimal.valueOf(100_000))
                 .build();
 
-        SaleEntity newSale1 = saleRepository.save(saleEntity);
+      /*  SaleEntity newSale1 = saleRepository.save(saleEntity);
 
         DealerEntity dealer1 = newSale1.getDealer();
-        CarEntity car1 = newSale1.getCar();
+        CarEntity car1 = newSale1.getCar();*/
 
-        SalesService salesService = context.getBean(SalesService.class);
+       /* SalesService salesService = context.getBean(SalesService.class);
         long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
                 nameNoName, surnameNoName, car1.getCarId(), margin);
         System.out.println(saleRepository.findById(newSaleId).get());
 
         SaleEntity sale = salesService.getSaleByClientSurname("As");
-        System.out.println(sale);
+        System.out.println(sale);*/
 
-        ClientService clientService = context.getBean(ClientService.class);
+   /*     ClientService clientService = context.getBean(ClientService.class);
         ClientEntity clientEntity1 = clientService.findClientForCarId(car1.getCarId());
-        System.out.println(clientEntity1);
+        System.out.println(clientEntity1);*/
+
+        CarService carService = context.getBean(CarService.class);
+        long addNewCar = carService.addNewCar("VW", "Pink", 1999,
+                250, 5, TypeOfCar.SEDAN, BigDecimal.valueOf(10_000));
+        System.out.println(addNewCar);
+
+
 
     }
 
