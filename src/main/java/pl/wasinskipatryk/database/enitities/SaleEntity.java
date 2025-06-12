@@ -33,7 +33,7 @@ public class SaleEntity {
     @JoinColumn(name = "car_id")
     private CarEntity car;
 
-    @Column(name = "date")
+    @Column(name = "sale_date")
     private Instant date;
 
     @Column(name = "sell_car_price")
@@ -46,7 +46,7 @@ public class SaleEntity {
                ", dealer=" + dealer +
                ", clientId=" + client +
                ", car=" + car +
-               ", date=" + date +
+               ", sale_date=" + date +
                ", sellCarPrice=" + sellCarPrice +
                '}';
     }
