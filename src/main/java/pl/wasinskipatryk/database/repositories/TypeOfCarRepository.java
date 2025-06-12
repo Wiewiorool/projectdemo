@@ -10,7 +10,7 @@ import pl.wasinskipatryk.database.enitities.TypeOfCarEntity;
 public interface TypeOfCarRepository extends JpaRepository<TypeOfCarEntity, Long> {
     @Query(value = """
             SELECT * FROM type_of_car
-            WHERE UPPER(value) LIKE UPPER(:typeOfCar)
+            WHERE UPPER(type_of_car_value) LIKE UPPER(:typeOfCar)
             ORDER BY type_of_car_id limit 1
             """, nativeQuery = true)
     TypeOfCarEntity findByTypeOfCar(@Param("typeOfCar") String typeOfCar);

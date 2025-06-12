@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class TypeOfCarEntity {
     @Id
     @Column(name = "type_of_car_id")
@@ -20,7 +19,7 @@ public class TypeOfCarEntity {
         "Type_of_car_id_seq", allocationSize = 1)
     private Long typeOfCarId;
 
-    @Column(name = "value")
+    @Column(name = "type_of_car_value")
     private String value;
 
 }
