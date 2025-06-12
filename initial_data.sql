@@ -51,7 +51,7 @@ create table Sale
 dealer_id integer not null,
 client_id integer not null,
 car_id integer not null,
-date timestamp not null,
+sale_date timestamp not null,
 sell_car_price decimal(8,2) not null,
 FOREIGN KEY (dealer_id) references Dealer(dealer_id) on delete cascade,
 FOREIGN KEY (client_id) references Client(client_id) on delete cascade,
