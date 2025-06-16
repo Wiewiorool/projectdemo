@@ -53,5 +53,27 @@ class CarServiceTest {
         //then
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(2, actual.size());
+
+        CarEntity audi = actual.stream()
+                .filter(car -> car.getCarDetails().getModelName().equals("Audi"))
+                .findFirst()
+                .orElseThrow();
+        Assertions.assertEquals("gray", audi.getCarDetails().getColor());
+        Assertions.assertEquals(2025, audi.getCarDetails().getProductionYear());
+        Assertions.assertEquals(140, audi.getCarDetails().getHorsePower());
+        Assertions.assertEquals(5, audi.getCarDetails().getNumberOfDoors());
+        Assertions.assertEquals("HATCHBACK", audi.getCarDetails().getTypeOfCar().getValue());
+        Assertions.assertEquals(BigDecimal.valueOf(10_000).stripTrailingZeros(), audi.getBuyCarPrice().stripTrailingZeros());
+
+        CarEntity bmw = actual.stream()
+                .filter(car -> car.getCarDetails().getModelName().equals("BMW"))
+                .findFirst()
+                .orElseThrow();
+        Assertions.assertEquals("blue", bmw.getCarDetails().getColor());
+        Assertions.assertEquals(2025, bmw.getCarDetails().getProductionYear());
+        Assertions.assertEquals(140, bmw.getCarDetails().getHorsePower());
+        Assertions.assertEquals(2, bmw.getCarDetails().getNumberOfDoors());
+        Assertions.assertEquals("HATCHBACK", bmw.getCarDetails().getTypeOfCar().getValue());
+        Assertions.assertEquals(BigDecimal.valueOf(15_000).stripTrailingZeros(), bmw.getBuyCarPrice().stripTrailingZeros());
     }
 }
