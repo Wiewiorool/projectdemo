@@ -59,7 +59,14 @@ class CarServiceTest {
         assertCar(actual.get(1), "BMW", "blue", 2025, 140, 2, "HATCHBACK", 15_000);
     }
 
-    private static void assertCar(CarEntity car, String modelName, String color, int date, int horsePower, int doors, String typeOfCar, int sellPrice) {
-
+    private static void assertCar(CarEntity carEntity, String modelName, String color, int year,
+                                  int horsePower, int doors, String typeOfCar, int sellPrice) {
+        Assertions.assertEquals(modelName, carEntity.getCarDetails().getModelName());
+        Assertions.assertEquals(color, carEntity.getCarDetails().getColor());
+        Assertions.assertEquals(year, carEntity.getCarDetails().getProductionYear());
+        Assertions.assertEquals(horsePower, carEntity.getCarDetails().getHorsePower());
+        Assertions.assertEquals(doors, carEntity.getCarDetails().getNumberOfDoors());
+        Assertions.assertEquals(typeOfCar, carEntity.getCarDetails().getTypeOfCar().getValue());
+        Assertions.assertEquals(BigDecimal.valueOf(sellPrice).stripTrailingZeros(), carEntity.getBuyCarPrice().stripTrailingZeros());
     }
 }
