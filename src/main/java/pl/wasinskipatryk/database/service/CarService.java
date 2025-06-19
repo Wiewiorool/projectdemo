@@ -13,7 +13,7 @@ import pl.wasinskipatryk.database.repositories.TypeOfCarRepository;
 import pl.wasinskipatryk.demo.car.TypeOfCar;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -29,6 +29,7 @@ public class CarService {
         this.carRepository = carRepository;
         this.typeOfCarRepository = typeOfCarRepository;
     }
+
     @Transactional
     public long addNewCar(
             String modelName, String colour, int productionYear,
@@ -44,16 +45,16 @@ public class CarService {
         if (typeOfCarEntity == null) {
             log.info("Type of car does not exist");
             TypeOfCarEntity toce = TypeOfCarEntity.builder()
-                .value(typeOfCar.name())
-                .build();
+                    .value(typeOfCar.name())
+                    .build();
             CarDetailsEntity cde = CarDetailsEntity.builder()
-                .modelName(modelName)
-                .color(colour)
-                .productionYear(productionYear)
-                .horsePower(horsePower)
-                .numberOfDoors(nrOfDoors)
-                .typeOfCar(toce)
-                .build();
+                    .modelName(modelName)
+                    .color(colour)
+                    .productionYear(productionYear)
+                    .horsePower(horsePower)
+                    .numberOfDoors(nrOfDoors)
+                    .typeOfCar(toce)
+                    .build();
             CarEntity newSavedCar = saveNewCar(cde, buyPrice);
             return newSavedCar.getCarId();
         } else {
@@ -64,13 +65,13 @@ public class CarService {
             if (carDetailsEntity == null) {
                 log.info("Car details don't exist");
                 CarDetailsEntity cde = CarDetailsEntity.builder()
-                    .modelName(modelName)
-                    .color(colour)
-                    .productionYear(productionYear)
-                    .horsePower(horsePower)
-                    .numberOfDoors(nrOfDoors)
-                    .typeOfCar(typeOfCarEntity)
-                    .build();
+                        .modelName(modelName)
+                        .color(colour)
+                        .productionYear(productionYear)
+                        .horsePower(horsePower)
+                        .numberOfDoors(nrOfDoors)
+                        .typeOfCar(typeOfCarEntity)
+                        .build();
                 CarEntity newSavedCar = saveNewCar(cde, buyPrice);
                 return newSavedCar.getCarId();
             } else {
@@ -87,5 +88,10 @@ public class CarService {
                 .buyCarPrice(buyPrice)
                 .build());
         return newSave;
+    }
+
+    public List<CarEntity> findAllCars() {
+        List<CarEntity> allCars = carRepository.findAll();
+        return allCars;
     }
 }
