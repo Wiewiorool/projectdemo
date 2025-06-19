@@ -61,13 +61,14 @@ class CarServiceTest {
 
     private static void assertCar(CarEntity carEntity, String modelName, String color, int year,
                                   int horsePower, int doors, String typeOfCar, int sellPrice) {
-        var car = carEntity.getCarDetails();
-        Assertions.assertEquals(modelName, car.getModelName());
-        Assertions.assertEquals(color, car.getColor());
-        Assertions.assertEquals(year, car.getProductionYear());
-        Assertions.assertEquals(horsePower, car.getHorsePower());
-        Assertions.assertEquals(doors, car.getNumberOfDoors());
-        Assertions.assertEquals(typeOfCar, car.getTypeOfCar().getValue());
+
+        var details = carEntity.getCarDetails();
+        Assertions.assertEquals(modelName, details.getModelName());
+        Assertions.assertEquals(color, details.getColor());
+        Assertions.assertEquals(year, details.getProductionYear());
+        Assertions.assertEquals(horsePower, details.getHorsePower());
+        Assertions.assertEquals(doors, details.getNumberOfDoors());
+        Assertions.assertEquals(typeOfCar, details.getTypeOfCar().getValue());
         Assertions.assertEquals(BigDecimal.valueOf(sellPrice).stripTrailingZeros(), carEntity.getBuyCarPrice().stripTrailingZeros());
     }
 }
