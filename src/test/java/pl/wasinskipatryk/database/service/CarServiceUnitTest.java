@@ -50,7 +50,7 @@ public class CarServiceUnitTest {
   }
 
   @Test
-  public void shouldAddNewCar(){
+  public void shouldAddNewCarWhenTypeOfCarExistsAndCarDetailsExists(){
     //given
     String modelName = "Golf";
     String colour = "gray";
