@@ -57,7 +57,7 @@ public class SalesService {
         Optional<DealerEntity> dealerEntityOptional = dealerRepository.findById(dealerId);
 
         if (dealerEntityOptional.isEmpty()) {
-            log.info("dealer " + dealerId + " was supposed to be int he system but can't find him");
+            log.info("dealer " + dealerId + " was supposed to be int the system but can't find him");
             throw new IllegalArgumentException("Dealer not found");
         }
         DealerEntity dealerEntity = dealerEntityOptional.get();
