@@ -57,7 +57,7 @@ class SalesServiceUnitTest {
 
     }
 
-/*    @Test
+/*   @Test
     void shouldRegisterNewSale() {
         //given
         long dealerId = 1;
