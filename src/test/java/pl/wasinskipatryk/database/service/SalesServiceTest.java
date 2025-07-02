@@ -40,19 +40,41 @@ class SalesServiceTest {
     @Test
     void registerNewSaleWhenDealerExist() {
         //given\
-        PersonalDataEntity dealerPersonal = PersonalDataEntity.builder()
-                .name("1")
-                .surname("2")
-                .build();
         DealerEntity dealer = DealerEntity.builder()
-                .personalData(dealerPersonal)
                 .degree("Master")
+                .personalData(PersonalDataEntity.builder()
+                        .surname("Smith")
+                        .name("Joe")
+                        .build())
                 .build();
-        DealerEntity saveNewDealer = dealerRepository.save(dealer);
-        long dealerId = saveNewDealer.getDealerId();
+        CarDetailsEntity details = CarDetailsEntity.builder()
+                .color("blue")
+                .typeOfCar(TypeOfCarEntity.builder()
+                        .value("SEDAN")
+                        .build())
+                .numberOfDoors(5)
+                .modelName("Audi")
+                .productionYear(2020)
+                .horsePower(144)
+                .build();
+        CarEntity car = CarEntity.builder()
+                .buyCarPrice(BigDecimal.valueOf(10_000))
+                .carDetails(details)
+                .build();
+        ClientEntity client = ClientEntity.builder()
+                .car(car)
+                .previouslyOwnedCars(0)
+                .personalData(PersonalDataEntity.builder()
+                        .name("Bruno")
+                        .surname("Ken")
+                        .build())
+                .build();
+        carRepository.save(car);
+        dealerRepository.save(dealer);
+        long dealerId = dealer.getDealerId();
         //when
-        long newSaleId = salesService.registerNewSale(dealerId, "Adam",
-                "Smith", 5, 1.8);
+        long newSaleId = salesService.registerNewSale(dealerId, client.getPersonalData().getName(),
+                client.getPersonalData().getSurname(), car.getCarId(), 1.8);
         //then
         Optional<SaleEntity> savedSale = saleRepository.findById(newSaleId);
         Assertions.assertTrue(savedSale.isPresent());
