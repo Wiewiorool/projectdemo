@@ -47,6 +47,7 @@ class SalesServiceTest {
                         .name("Joe")
                         .build())
                 .build();
+
         CarDetailsEntity details = CarDetailsEntity.builder()
                 .color("blue")
                 .typeOfCar(TypeOfCarEntity.builder()
@@ -57,10 +58,12 @@ class SalesServiceTest {
                 .productionYear(2020)
                 .horsePower(144)
                 .build();
+
         CarEntity car = CarEntity.builder()
                 .buyCarPrice(BigDecimal.valueOf(10_000))
                 .carDetails(details)
                 .build();
+
         ClientEntity client = ClientEntity.builder()
                 .car(car)
                 .previouslyOwnedCars(0)
@@ -69,8 +72,10 @@ class SalesServiceTest {
                         .surname("Ken")
                         .build())
                 .build();
+
         carRepository.save(car);
         dealerRepository.save(dealer);
+
         long dealerId = dealer.getDealerId();
         //when
         long newSaleId = salesService.registerNewSale(dealerId, client.getPersonalData().getName(),

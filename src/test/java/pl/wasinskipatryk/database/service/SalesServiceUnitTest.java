@@ -15,8 +15,11 @@ import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.DealerRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class SalesServiceUnitTest {
@@ -67,8 +70,13 @@ class SalesServiceUnitTest {
         double commission = 1.8;
         long carId = 1;
         long expectedNewSaleId = 5;
-        Optional<DealerEntity> dealerEntityOptional = dealerRepository.findById(dealerId);
 
+        when(dealerRepository.findById(dealerId)).thenReturn(Optional.of(dealerEntity));
+        when(carRepository.findById(carId)).thenReturn(Optional.of(carEntity));
+        when(clientRepository.save(any(ClientEntity.class))).thenReturn(clientEntity);
+        when(carEntity.getBuyCarPrice()).thenReturn(BigDecimal.valueOf(10_000));
+        when(saleRepository.save(any(SaleEntity.class))).thenReturn(saleEntity);
+        when(saleEntity.getSaleId()).thenReturn(expectedNewSaleId);
 
         //when
         long newSaleId = salesService.registerNewSale(dealerId, clientName, clientSurname, carId, commission);
@@ -78,26 +86,91 @@ class SalesServiceUnitTest {
     }
 
     @Test
-    void shouldNotRegisterNewSaleIfDealerDoNotExist() {
+    void shouldNotRegisterNewSaleIfDealerDoesNotExist() {
         //given
-        long dealerId = 12;
+        long nonExistentDealerId = 12;
         String clientName = "Adam";
         String clientSurname = "Smith";
         long carId = 1;
         double commission = 1.8;
 
-        when(dealerRepository.findById(dealerId)).thenReturn(Optional.empty());
+        when(dealerRepository.findById(nonExistentDealerId)).thenReturn(Optional.empty());
 
         //when
 
         //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            salesService.registerNewSale(dealerId, clientName, clientSurname, carId, commission);
+            salesService.registerNewSale(nonExistentDealerId, clientName, clientSurname, carId, commission);
         });
     }
 
 
     @Test
     void getSaleByClientSurname() {
+        //given
+        String clientSurname = "Smith";
+        long clientId = 1;
+
+        when(clientRepository.getAllClientsWithSurname(clientSurname)).thenReturn(List.of(clientEntity));
+        when(saleRepository.findUsersSale(clientId)).thenReturn(List.of(saleEntity));
+        when(clientEntity.getClientId()).thenReturn(clientId);
+
+        //when
+        SaleEntity actual = salesService.getSaleByClientSurname(clientSurname);
+
+        //then
+        Assertions.assertEquals(saleEntity,actual);
+
     }
+
+    @Test
+    void shouldThrowExceptionWhenClientDoesNotExist() {
+        //given
+        String nonExistentClientSurname = "Smith";
+
+        when(clientRepository.getAllClientsWithSurname(nonExistentClientSurname)).thenReturn(List.of());
+
+        //when
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            salesService.getSaleByClientSurname(nonExistentClientSurname);
+        });
+
+    }
+    @Test
+    void shouldThrowExceptionWhenClientDidNotHaveAnySales() {
+        //given
+        String nonExistentClientSurname = "Smith";
+        long clientId = 1L;
+
+        when(clientRepository.getAllClientsWithSurname(nonExistentClientSurname)).thenReturn(List.of(clientEntity));
+        when(saleRepository.findUsersSale(clientId)).thenReturn(List.of());
+
+        //when
+
+        //then
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            salesService.getSaleByClientSurname(nonExistentClientSurname);
+        });
+
+    }
+    @Test
+    void shouldThrowExceptionWhenClientHasMoreThanOneSale() {
+        //given
+        String clientSurname = "Smith";
+        long clientId = 1L;
+
+        when(clientRepository.getAllClientsWithSurname(clientSurname)).thenReturn(List.of(clientEntity));
+        when(saleRepository.findUsersSale(clientId)).thenReturn(List.of(saleEntity,saleEntity));
+
+        //when
+
+        //then
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            salesService.getSaleByClientSurname(clientSurname);
+        });
+
+    }
+
 }
