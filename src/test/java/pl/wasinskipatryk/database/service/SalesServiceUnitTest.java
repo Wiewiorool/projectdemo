@@ -15,7 +15,8 @@ import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.DealerRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 
-import static net.bytebuddy.matcher.ElementMatchers.any;
+import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 
 class SalesServiceUnitTest {
@@ -57,7 +58,7 @@ class SalesServiceUnitTest {
 
     }
 
-/*   @Test
+    @Test
     void shouldRegisterNewSale() {
         //given
         long dealerId = 1;
@@ -66,11 +67,7 @@ class SalesServiceUnitTest {
         double commission = 1.8;
         long carId = 1;
         long expectedNewSaleId = 5;
-
-
-        when(dealerEntity.getDealerId()).thenReturn(dealerId);
-        when(carEntity.getCarId()).thenReturn(.)
-        when(saleEntity.getSaleId()).thenReturn(expectedNewSaleId);
+        Optional<DealerEntity> dealerEntityOptional = dealerRepository.findById(dealerId);
 
 
         //when
@@ -78,25 +75,26 @@ class SalesServiceUnitTest {
 
         //then
         Assertions.assertEquals(expectedNewSaleId, newSaleId);
-    }*/
+    }
 
-    /*@Test
+    @Test
     void shouldNotRegisterNewSaleIfDealerDoNotExist() {
         //given
-        long dealerId = 1;
+        long dealerId = 12;
         String clientName = "Adam";
         String clientSurname = "Smith";
         long carId = 1;
-        long expectedNewSaleId = 5;
+        double commission = 1.8;
 
-        when(dealerRepository.fin)
-
+        when(dealerRepository.findById(dealerId)).thenReturn(Optional.empty());
 
         //when
 
         //then
-        Assertions.assertEquals(expectedNewSaleId, newSaleId);
-    }*/
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            salesService.registerNewSale(dealerId, clientName, clientSurname, carId, commission);
+        });
+    }
 
 
     @Test
