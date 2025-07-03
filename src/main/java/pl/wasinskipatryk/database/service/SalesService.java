@@ -57,7 +57,7 @@ public class SalesService {
         Optional<DealerEntity> dealerEntityOptional = dealerRepository.findById(dealerId);
 
         if (dealerEntityOptional.isEmpty()) {
-            log.info("dealer " + dealerId + " was supposed to be int he system but can't find him");
+            log.info("dealer " + dealerId + " was supposed to be int the system but can't find him");
             throw new IllegalArgumentException("Dealer not found");
         }
         DealerEntity dealerEntity = dealerEntityOptional.get();
@@ -109,31 +109,31 @@ public class SalesService {
      * @throws IllegalStateException    - if two or more clients exists with provided surname
      */
     public SaleEntity getSaleByClientSurname(String clientSurname) {
-        List<ClientEntity> optionalClientEntity = clientRepository.findAllUsers(clientSurname);
+        List<ClientEntity> clientEntities = clientRepository.getAllClientsWithSurname(clientSurname);
 
-        if (optionalClientEntity.isEmpty()) {
+        if (clientEntities.isEmpty()) {
             log.info("Client doesnt exist");
             throw new IllegalArgumentException("Client not found");
         } else if
-        (optionalClientEntity.size() > 1) {
+        (clientEntities.size() > 1) {
             log.info("Its more than one client with surname: " + clientSurname);
             throw new IllegalStateException("More than one client");
         } else {
             log.info("Client found");
         }
-        ClientEntity client = optionalClientEntity.getFirst();
+        ClientEntity client = clientEntities.getFirst();
 
-        List<SaleEntity> usersSale = saleRepository.findUsersSale(client.getClientId());
+        List<SaleEntity> usersSales = saleRepository.findUsersSale(client.getClientId());
 
-        if (usersSale.isEmpty()) {
+        if (usersSales.isEmpty()) {
             log.info("No sales found");
             throw new IllegalStateException("No sales found");
         }
-        if (usersSale.size() > 1) {
+        if (usersSales.size() > 1) {
             log.info("More than 1 sale found");
             throw new IllegalStateException("More than 1 sale found");
         }
-        return usersSale.getFirst();
+        return usersSales.getFirst();
     }
 
 }
