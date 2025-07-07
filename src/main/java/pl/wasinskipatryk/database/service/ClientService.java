@@ -27,24 +27,19 @@ public class ClientService {
 
     @Transactional
     public ClientEntity findClientForCarId(Long carId) {
-
         List<ClientEntity> clients = clientRepository.findByCarId(carId);
 
-        CarEntity carEntity = carRepository.findById(carId)
-                .orElseThrow(() -> new IllegalArgumentException("Car not found for carid" + carId));
 
         if (clients.isEmpty()) {
-            log.info("Client not found for that car id " + clients + " Creating new client");
-            ClientEntity addedNewClient = addNewClient("Patryk", "Wasinski", carEntity);
-            return clientRepository.save(addedNewClient);
+            log.info("Client not found for that car id " + carId);
+            throw new IllegalStateException("Client not found");
         }
         if (clients.size() > 1) {
-            log.info("Found more than one client for that car id " + clients);
+            log.info("Found more than one client for that car id " + carId + " " + clients);
             throw new IllegalStateException("Found more than one client");
         }
         return clients.get(0);
     }
-
 
     public ClientEntity addNewClient(
             String clientName,
@@ -62,5 +57,20 @@ public class ClientService {
         return clientRepository.save(newClient);
     }
 
+    public ClientEntity findByNameAndSurname(String clientName, String clientSurname, CarEntity carEntity) {
 
+        List<ClientEntity> clients = clientRepository.findByNameAndSurname(clientName, clientSurname);
+
+
+        if (clients.isEmpty()) {
+            log.info("Client not found for that car id. Creating new client ");
+            return addNewClient(clientName, clientSurname, carEntity);
+        }
+        if (clients.size() > 1) {
+            log.info("Found more than one client with than name and surname " + clients);
+            throw new IllegalStateException("Found more than one client");
+        }
+        return clients.get(0);
+
+    }
 }

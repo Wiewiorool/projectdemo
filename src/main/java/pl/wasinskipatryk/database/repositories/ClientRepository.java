@@ -17,6 +17,14 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
             """, nativeQuery = true)
     List<ClientEntity> getAllClientsWithSurname(@Param("clientSurname") String surname);
 
+    @Query(value = """
+            SELECT c.* FROM Client c
+            JOIN Personal_data p ON c.personal_data_id = p.personal_data_id
+            WHERE p.surname = :clientSurname AND p.name = :clientName
+            """, nativeQuery = true)
+    List<ClientEntity> findByNameAndSurname(@Param("clientName") String clientName,
+                                            @Param("clientSurname") String clientSurname);
+
     @Query(value = "SELECT c.* FROM Client c WHERE c.car_id = :carId", nativeQuery = true)
     List<ClientEntity> findByCarId(@Param("carId") Long carId);
 }
