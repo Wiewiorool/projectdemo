@@ -32,8 +32,8 @@ import java.util.List;
 @SpringBootApplication
 public class DemoApplication {
 
-    private static final String nameNoName = "NoName";
-    private static final String surnameNoName = "NoName";
+    private static final String name = "James";
+    private static final String surname = "Aquarius";
     private static final double margin = 1.8;
 
     public static void main(String[] args) {
@@ -50,6 +50,8 @@ public class DemoApplication {
                 .personalData(personalDataEntityDealer)
                 .sales(List.of())
                 .build();
+        DealerRepository dealerRepository = context.getBean(DealerRepository.class);
+        DealerEntity dealer1 = dealerRepository.save(dealerEntity);
 
         CarEntity carEntity = CarEntity.builder()
                 .buyCarPrice(BigDecimal.valueOf(10_000))
@@ -65,28 +67,24 @@ public class DemoApplication {
                         .build())
                 .build();
 
-
         CarService carService = context.getBean(CarService.class);
         long newCarId = carService.addNewCar("VW", "Pink", 1999,
                 250, 5, TypeOfCar.SEDAN, BigDecimal.valueOf(10_000));
         System.out.println(newCarId);
 
-        DealerRepository dealerRepository = context.getBean(DealerRepository.class);
-        DealerEntity dealer1 = dealerRepository.save(dealerEntity);
-
         ClientService clientService = context.getBean(ClientService.class);
-        ClientEntity findClient = clientService.findByNameAndSurname("James", "Aquarius", carEntity);
+        ClientEntity findClient = clientService.findByNameAndSurname(name, surname, carEntity);
         ClientEntity clientEntity1 = clientService.findClientForCarId(newCarId);
         System.out.println(findClient);
         System.out.println(clientEntity1);
 
         SalesService salesService = context.getBean(SalesService.class);
         long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
-                nameNoName, surnameNoName, newCarId, margin);
+                name, surname, newCarId, margin);
         System.out.println(saleRepository.findById(newSaleId).get());
 
 
-        SaleEntity sale = salesService.getSaleByClientSurname("Aquarius");
+        SaleEntity sale = salesService.getSaleByClientSurname(name);
         System.out.println(sale);
 
 

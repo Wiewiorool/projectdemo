@@ -29,7 +29,6 @@ public class ClientService {
     public ClientEntity findClientForCarId(Long carId) {
         List<ClientEntity> clients = clientRepository.findByCarId(carId);
 
-
         if (clients.isEmpty()) {
             log.info("Client not found for that car id " + carId);
             throw new IllegalStateException("Client not found");
