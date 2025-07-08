@@ -53,7 +53,7 @@ public class ClientService {
                         .surname(clientSurname)
                         .build())
                 .build();
-        return clientRepository.save(newClient);
+        return newClient;
     }
 
     public ClientEntity findByNameAndSurname(String clientName, String clientSurname, CarEntity carEntity) {
