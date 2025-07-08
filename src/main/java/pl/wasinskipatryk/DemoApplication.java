@@ -32,11 +32,13 @@ import java.util.List;
 @SpringBootApplication
 public class DemoApplication {
 
-    private static final String name = "James";
-    private static final String surname = "Aquarius";
+
     private static final double margin = 1.8;
 
     public static void main(String[] args) {
+        String clientName = "James";
+        String clientSurname = "Aquarius";
+
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         SaleRepository saleRepository = context.getBean(SaleRepository.class);
 
@@ -72,19 +74,20 @@ public class DemoApplication {
                 250, 5, TypeOfCar.SEDAN, BigDecimal.valueOf(10_000));
         System.out.println(newCarId);
 
+
         ClientService clientService = context.getBean(ClientService.class);
-        ClientEntity findClient = clientService.findByNameAndSurname(name, surname, carEntity);
+        ClientEntity findClient = clientService.findByNameAndSurname(clientName, clientSurname, carEntity);
         ClientEntity clientEntity1 = clientService.findClientForCarId(newCarId);
         System.out.println(findClient);
         System.out.println(clientEntity1);
 
         SalesService salesService = context.getBean(SalesService.class);
         long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
-                name, surname, newCarId, margin);
+                clientName, clientSurname, newCarId, margin);
         System.out.println(saleRepository.findById(newSaleId).get());
 
 
-        SaleEntity sale = salesService.getSaleByClientSurname(name);
+        SaleEntity sale = salesService.getSaleByClientSurname(clientName);
         System.out.println(sale);
 
 
