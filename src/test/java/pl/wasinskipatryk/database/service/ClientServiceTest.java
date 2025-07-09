@@ -16,6 +16,8 @@ import pl.wasinskipatryk.database.repositories.CarRepository;
 import pl.wasinskipatryk.database.repositories.ClientRepository;
 
 class ClientServiceTest {
+  public static final String ANY_SURNAME = "ANY_SURNAME";
+  public static final String ANY_NAME = "ANY_NAME";
   private ClientService clientService;
   @Mock
   private CarRepository carRepository;
@@ -70,6 +72,48 @@ class ClientServiceTest {
     //then
     Assertions.assertEquals(client1, actual);
     verify(clientRepository).findByCarId(eq(carId));
+    verifyNoMoreInteractions(clientRepository);
+  }
+
+  @Test
+  public void shouldReturnClientForNameAndSurname(){
+    //given
+    when(clientRepository.findByNameAndSurname(eq(ANY_NAME), eq(ANY_SURNAME))).thenReturn(List.of(client1));
+
+    //when
+    var actual =  clientService.findByNameAndSurname(ANY_NAME, ANY_SURNAME);
+
+    //then
+    Assertions.assertEquals(client1, actual);
+    verify(clientRepository).findByNameAndSurname(ANY_NAME, ANY_SURNAME);
+    verifyNoMoreInteractions(clientRepository);
+  }
+
+  @Test
+  public void shouldThrowExceptionWhenMoreThan1ClientWithNameAndSurname(){
+    //given
+    when(clientRepository.findByNameAndSurname(eq(ANY_NAME), eq(ANY_SURNAME))).thenReturn(List.of(client1, client1));
+
+    //when
+    Assertions.assertThrows(IllegalStateException.class,
+                            () -> clientService.findByNameAndSurname(ANY_NAME, ANY_SURNAME));
+
+    //then
+    verify(clientRepository).findByNameAndSurname(ANY_NAME, ANY_SURNAME);
+    verifyNoMoreInteractions(clientRepository);
+  }
+
+  @Test
+  public void shouldThrowExceptionWhenNoClientWithNameAndSurname(){
+    //given
+    when(clientRepository.findByNameAndSurname(eq(ANY_NAME), eq(ANY_SURNAME))).thenReturn(List.of());
+
+    //when
+    Assertions.assertThrows(IllegalStateException.class,
+                            () -> clientService.findByNameAndSurname(ANY_NAME, ANY_SURNAME));
+
+    //then
+    verify(clientRepository).findByNameAndSurname(ANY_NAME, ANY_SURNAME);
     verifyNoMoreInteractions(clientRepository);
   }
 }
