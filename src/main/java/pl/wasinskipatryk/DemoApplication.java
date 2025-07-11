@@ -1,11 +1,12 @@
 package pl.wasinskipatryk;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import pl.wasinskipatryk.database.enitities.*;
-import pl.wasinskipatryk.database.repositories.ClientRepository;
 import pl.wasinskipatryk.database.repositories.DealerRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 import pl.wasinskipatryk.database.service.CarService;
@@ -35,10 +36,11 @@ public class DemoApplication {
 
 
     private static final double margin = 1.8;
+    private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 
     public static void main(String[] args) {
-        String clientName = "B";
-        String clientSurname = "4XX";
+        String clientName = "ZX";
+        String clientSurname = "7XX";
 
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         SaleRepository saleRepository = context.getBean(SaleRepository.class);
@@ -70,8 +72,13 @@ public class DemoApplication {
                 .build();
 
         ClientService clientService = context.getBean(ClientService.class);
-        ClientEntity findClient = clientService.findByNameAndSurname(clientName, clientSurname, carEntity);
+        ClientEntity findClient = clientService.findByNameAndSurname(clientName, clientSurname);
+        if (findClient == null) {
+            log.info("Client not found, creating new one: " + clientName + " " + clientSurname);
+            findClient = clientService.addNewClient(clientName, clientSurname);
+        }
         System.out.println(findClient);
+
 
         CarService carService = context.getBean(CarService.class);
         long newCarId = carService.addNewCar("VW", "Pink", 1999,
@@ -89,7 +96,6 @@ public class DemoApplication {
 
         SaleEntity sale = salesService.getSaleByClientSurname(clientSurname);
         System.out.println(sale);
-
 
     }
 
