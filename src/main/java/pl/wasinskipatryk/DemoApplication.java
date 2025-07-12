@@ -1,13 +1,17 @@
 package pl.wasinskipatryk;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import pl.wasinskipatryk.database.enitities.*;
-import pl.wasinskipatryk.database.repositories.ClientRepository;
+import pl.wasinskipatryk.database.repositories.DealerRepository;
 import pl.wasinskipatryk.database.repositories.SaleRepository;
 import pl.wasinskipatryk.database.service.CarService;
+import pl.wasinskipatryk.database.service.ClientService;
+import pl.wasinskipatryk.database.service.SalesService;
 import pl.wasinskipatryk.demo.car.Car;
 import pl.wasinskipatryk.demo.car.CarDetails;
 import pl.wasinskipatryk.demo.car.CarPrice;
@@ -25,93 +29,59 @@ import pl.wasinskipatryk.demo.dealer.DegreeDealer;
 import pl.wasinskipatryk.demo.salesrepository.ListBasedSaleRepository;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication {
 
-    private static final String nameNoName = "NoName";
-    private static final String surnameNoName = "NoName";
+
     private static final double margin = 1.8;
+    private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 
     public static void main(String[] args) {
+        String clientName = "ZX";
+        String clientSurname = "7XX";
+
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
-        ClientRepository clientRepository = context.getBean(ClientRepository.class);
         SaleRepository saleRepository = context.getBean(SaleRepository.class);
-
-
-        TypeOfCarEntity typeOfCarEntity = TypeOfCarEntity.builder()
-                .value("Sedan")
-                .build();
-
-        CarDetailsEntity carDetailsEntity = CarDetailsEntity.builder()
-                .color("Black")
-                .horsePower(250)
-                .modelName("Audi")
-                .numberOfDoors(4)
-                .productionYear(2024)
-                .typeOfCar(typeOfCarEntity)
-                .build();
-
-        CarEntity carEntity = CarEntity.builder()
-                .carDetails(carDetailsEntity)
-                .buyCarPrice(BigDecimal.valueOf(30000))
-                .build();
 
         PersonalDataEntity personalDataEntityDealer = PersonalDataEntity.builder()
                 .name("Maria")
                 .surname("Wojcik")
                 .build();
-
-        PersonalDataEntity personalDataEntityClient = PersonalDataEntity.builder()
-                .name("Josef")
-                .surname("As")
-                .build();
-
-        ClientEntity clientEntity = ClientEntity.builder()
-                .personalData(personalDataEntityClient)
-                .previouslyOwnedCars(1)
-                .car(carEntity)
-                .build();
-
         DealerEntity dealerEntity = DealerEntity.builder()
                 .degree("degree2")
                 .personalData(personalDataEntityDealer)
                 .sales(List.of())
                 .build();
+        DealerRepository dealerRepository = context.getBean(DealerRepository.class);
+        DealerEntity dealer1 = dealerRepository.save(dealerEntity);
 
-        SaleEntity saleEntity = SaleEntity.builder()
-                .dealer(dealerEntity)
-                .client(clientEntity)
-                .car(carEntity)
-                .date(Instant.parse("2026-01-01T00:00:00Z"))
-                .sellCarPrice(BigDecimal.valueOf(100_000))
-                .build();
+        ClientService clientService = context.getBean(ClientService.class);
+        ClientEntity findClient = clientService.findByNameAndSurname(clientName, clientSurname);
+        if (findClient == null) {
+            log.info("Client not found, creating new one: " + clientName + " " + clientSurname);
+            findClient = clientService.addNewClient(clientName, clientSurname);
+        }
+        System.out.println(findClient);
 
-      /*  SaleEntity newSale1 = saleRepository.save(saleEntity);
-
-        DealerEntity dealer1 = newSale1.getDealer();
-        CarEntity car1 = newSale1.getCar();*/
-
-       /* SalesService salesService = context.getBean(SalesService.class);
-        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
-                nameNoName, surnameNoName, car1.getCarId(), margin);
-        System.out.println(saleRepository.findById(newSaleId).get());
-
-        SaleEntity sale = salesService.getSaleByClientSurname("As");
-        System.out.println(sale);*/
-
-   /*     ClientService clientService = context.getBean(ClientService.class);
-        ClientEntity clientEntity1 = clientService.findClientForCarId(car1.getCarId());
-        System.out.println(clientEntity1);*/
 
         CarService carService = context.getBean(CarService.class);
-        long addNewCar = carService.addNewCar("VW", "Pink", 1999,
+        long newCarId = carService.addNewCar("VW", "Pink", 1999,
                 250, 5, TypeOfCar.SEDAN, BigDecimal.valueOf(10_000));
-        System.out.println(addNewCar);
+        System.out.println(newCarId);
+
+        SalesService salesService = context.getBean(SalesService.class);
+        long newSaleId = salesService.registerNewSale(dealer1.getDealerId(),
+                clientName, clientSurname, newCarId, margin);
+        System.out.println(saleRepository.findById(newSaleId).get());
 
 
+        ClientEntity clientEntity1 = clientService.findClientForCarId(newCarId);
+        System.out.println(clientEntity1);
+
+        SaleEntity sale = salesService.getSaleByClientSurname(clientSurname);
+        System.out.println(sale);
 
     }
 

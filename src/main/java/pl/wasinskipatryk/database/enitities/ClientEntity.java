@@ -34,7 +34,7 @@ public class ClientEntity {
         return "ClientEntity{" +
                "clientId=" + clientId +
                ", ownedCars=" + previouslyOwnedCars +
-               ", car=" + car.toString() +
+               ", car=" + car +
                ", personalData=" + personalData +
                '}';
     }
