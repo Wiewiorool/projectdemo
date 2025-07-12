@@ -57,20 +57,6 @@ public class DemoApplication {
         DealerRepository dealerRepository = context.getBean(DealerRepository.class);
         DealerEntity dealer1 = dealerRepository.save(dealerEntity);
 
-        CarEntity carEntity = CarEntity.builder()
-                .buyCarPrice(BigDecimal.valueOf(10_000))
-                .carDetails(CarDetailsEntity.builder()
-                        .color("Pink")
-                        .typeOfCar(TypeOfCarEntity.builder()
-                                .value("SEDAN")
-                                .build())
-                        .numberOfDoors(5)
-                        .modelName("VW")
-                        .productionYear(1999)
-                        .horsePower(250)
-                        .build())
-                .build();
-
         ClientService clientService = context.getBean(ClientService.class);
         ClientEntity findClient = clientService.findByNameAndSurname(clientName, clientSurname);
         if (findClient == null) {
